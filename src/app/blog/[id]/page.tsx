@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useParams } from "next/navigation"
@@ -10,12 +10,14 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { getBlogPost, blogPosts } from "@/lib/blog-data"
+import { getBlogPost } from "@/lib/blog-data"
 import { Calendar, User, ArrowLeft, Heart, MessageCircle, Share2 } from "lucide-react"
 
 export default function BlogPostPage() {
   const params = useParams()
-  const post = getBlogPost(params.id as string)
+  const slug = params.id as string
+  const [post, setPost] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
   const [liked, setLiked] = useState(false)
   const [likes, setLikes] = useState(Math.floor(Math.random() * 100) + 20)
   const [comments, setComments] = useState([
@@ -35,6 +37,44 @@ export default function BlogPostPage() {
     },
   ])
   const [newComment, setNewComment] = useState("")
+
+  useEffect(() => {
+    fetchPost()
+  }, [slug])
+
+  const fetchPost = async () => {
+    try {
+      // Try fetching from database first
+      const response = await fetch(`/api/blog-posts/${slug}`)
+      if (response.ok) {
+        const data = await response.json()
+        setPost(data)
+      } else {
+        // Fallback to static data
+        const staticPost = getBlogPost(slug)
+        setPost(staticPost)
+      }
+    } catch (error) {
+      console.error('Failed to fetch blog post:', error)
+      // Fallback to static data
+      const staticPost = getBlogPost(slug)
+      setPost(staticPost)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 container mx-auto px-4 py-12 text-center">
+          <p className="text-gray-600">Loading...</p>
+        </main>
+        <Footer />
+      </div>
+    )
+  }
 
   if (!post) {
     return (
