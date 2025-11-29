@@ -101,7 +101,7 @@ export default function BlogPage() {
               <h2 className="text-2xl md:text-3xl font-bold mb-6">Featured Posts</h2>
               <div className="grid md:grid-cols-2 gap-8">
                 {featuredPosts.map((post) => (
-                  <Link key={post.id} href={`/blog/${post.id}`}>
+                  <Link key={post.id} href={`/blog/${post.slug}`}>
                     <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-full">
                       <div className="relative h-[250px]">
                         <Image
@@ -160,7 +160,7 @@ export default function BlogPage() {
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {(selectedCategory === "all" ? regularPosts : filteredPosts).map((post) => (
-                <Link key={post.id} href={`/blog/${post.id}`}>
+                <Link key={post.id} href={`/blog/${post.slug}`}>
                   <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-full">
                     <div className="relative h-[200px]">
                       <Image

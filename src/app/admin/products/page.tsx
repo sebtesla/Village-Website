@@ -27,7 +27,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Plus, Trash2, Package, Eye } from "lucide-react"
+import { ArrowLeft, Plus, Trash2, Package, Eye, Edit2 } from "lucide-react"
 
 interface Product {
   id: string
