@@ -97,22 +97,22 @@ export default function Home() {
   const [products, setProducts] = useState(staticProducts)
 
   useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('/api/products')
+        if (response.ok) {
+          const data = await response.json()
+          if (data && data.length > 0) {
+            setProducts(data)
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch products:', error)
+      }
+    }
+
     fetchProducts()
   }, [])
-
-  const fetchProducts = async () => {
-    try {
-      const response = await fetch('/api/products')
-      if (response.ok) {
-        const data = await response.json()
-        if (data && data.length > 0) {
-          setProducts(data)
-        }
-      }
-    } catch (error) {
-      console.error('Failed to fetch products:', error)
-    }
-  }
 
   return (
     <div className="min-h-screen flex flex-col">

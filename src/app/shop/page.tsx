@@ -22,26 +22,26 @@ export default function ShopPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('/api/products')
+        if (response.ok) {
+          const data = await response.json()
+          // Use database products if available, otherwise keep static products
+          if (data && data.length > 0) {
+            setProducts(data)
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch products:', error)
+        // Keep static products as fallback
+      } finally {
+        setLoading(false)
+      }
+    }
+
     fetchProducts()
   }, [])
-
-  const fetchProducts = async () => {
-    try {
-      const response = await fetch('/api/products')
-      if (response.ok) {
-        const data = await response.json()
-        // Use database products if available, otherwise keep static products
-        if (data && data.length > 0) {
-          setProducts(data)
-        }
-      }
-    } catch (error) {
-      console.error('Failed to fetch products:', error)
-      // Keep static products as fallback
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const filteredProducts = selectedCategory === "all"
     ? products

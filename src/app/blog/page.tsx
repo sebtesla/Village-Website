@@ -25,26 +25,26 @@ export default function BlogPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    const fetchBlogPosts = async () => {
+      try {
+        const response = await fetch('/api/blog-posts')
+        if (response.ok) {
+          const data = await response.json()
+          // Use database posts if available, otherwise keep static posts
+          if (data && data.length > 0) {
+            setBlogPosts(data)
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch blog posts:', error)
+        // Keep static posts as fallback
+      } finally {
+        setLoading(false)
+      }
+    }
+
     fetchBlogPosts()
   }, [])
-
-  const fetchBlogPosts = async () => {
-    try {
-      const response = await fetch('/api/blog-posts')
-      if (response.ok) {
-        const data = await response.json()
-        // Use database posts if available, otherwise keep static posts
-        if (data && data.length > 0) {
-          setBlogPosts(data)
-        }
-      }
-    } catch (error) {
-      console.error('Failed to fetch blog posts:', error)
-      // Keep static posts as fallback
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const filteredPosts = selectedCategory === "all"
     ? blogPosts
