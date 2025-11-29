@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Error><Code>NoSuchBucket</Code><Message>The specified bucket does not exist</Message><BucketName>same-file-uploads</BucketName><RequestId>10C7KXVCPDZTQKZB</RequestId><HostId>L5NEv5YPQu0hppbcPSjddDYosH6lsg4z3gzsLiDdXVoeMMGSmPGgjPwwxnFpxk9/YIadJIp/H+E=</HostId></Error>
