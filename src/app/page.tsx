@@ -4,116 +4,121 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { ProductCard } from "@/components/product-card"
 import { Button } from "@/components/ui/button"
+import { prisma } from "@/lib/prisma"
 
-// Sample products data - expanded catalog
+// Fallback products data - used when database is unavailable
 const staticProducts = [
   {
     id: "village-hat-green",
     name: "The Village Hat (Green)",
     price: 35,
-    image: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=800&h=800&fit=crop&q=80",
+    image: "https://i.imgur.com/vubIpVS.jpg",
     badge: "BUY 1 GET 1 FREE",
   },
   {
     id: "village-members-jersey",
     name: "The Village Members Only Jersey",
     price: 65,
-    image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=800&fit=crop&q=80",
+    image: "https://i.imgur.com/unWG7QQ.jpg",
     sizes: ["S", "M", "L", "XL", "XXL"],
   },
   {
     id: "soapy-tee-black",
     name: "Soapy Graphic Tee (Black)",
     price: 32,
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop&q=80",
+    image: "https://i.imgur.com/TzJUEME.jpg",
     sizes: ["S", "M", "L", "XL", "XXL"],
   },
   {
     id: "village-beanie",
     name: "The Village Beanie",
     price: 28,
-    image: "https://images.unsplash.com/photo-1576871337622-98d48d1cf531?w=800&h=800&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1576871337622-98d48d1cf531?w=800&h=800&fit=crop",
   },
   {
     id: "village-hoodie-black",
     name: "The Village Logo Hoodie (Black)",
     price: 60,
-    image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=800&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=800&fit=crop",
     sizes: ["S", "M", "L", "XL", "XXL"],
   },
   {
     id: "village-tee-white",
     name: "The Village Classic Tee (White)",
     price: 30,
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop&auto=format&q=80",
+    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop",
     sizes: ["S", "M", "L", "XL", "XXL"],
   },
   {
     id: "village-dad-hat",
     name: "The Village Dad Hat",
     price: 32,
-    image: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=800&h=800&fit=crop&auto=format&q=80",
+    image: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=800&h=800&fit=crop",
   },
   {
     id: "village-crewneck",
     name: "The Village Crewneck Sweatshirt",
     price: 55,
-    image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&h=800&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&h=800&fit=crop",
     sizes: ["S", "M", "L", "XL", "XXL"],
   },
   {
     id: "village-snapback",
     name: "The Village Snapback",
     price: 38,
-    image: "https://images.unsplash.com/photo-1589487391730-58f20eb2c308?w=800&h=800&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1589487391730-58f20eb2c308?w=800&h=800&fit=crop",
   },
   {
     id: "village-long-sleeve",
     name: "The Village Long Sleeve Tee",
     price: 40,
-    image: "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800&h=800&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800&h=800&fit=crop",
     sizes: ["S", "M", "L", "XL", "XXL"],
   },
   {
     id: "village-tote-bag",
     name: "The Village Tote Bag",
     price: 25,
-    image: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=800&h=800&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=800&h=800&fit=crop",
   },
   {
     id: "village-zip-hoodie",
     name: "The Village Zip-Up Hoodie",
     price: 70,
-    image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&h=800&fit=crop&auto=format&q=80",
+    image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=800&fit=crop",
     sizes: ["S", "M", "L", "XL", "XXL"],
     badge: "NEW ARRIVAL",
   },
 ]
 
 export default async function Home() {
-  // Fetch products from database
+  // Fetch products directly from database
   let products = staticProducts
 
   try {
-    const response = await fetch('https://therustvillage.netlify.app/api/products', {
-      cache: 'no-store'
+    const dbProducts = await prisma.product.findMany({
+      where: {
+        inStock: true,
+      },
+      orderBy: [
+        { featured: 'desc' },
+        { createdAt: 'desc' },
+      ],
     })
-    if (response.ok) {
-      const dbProducts = await response.json()
-      if (dbProducts && dbProducts.length > 0) {
-        // Transform database products to match ProductCard format
-        products = dbProducts.map((p: { slug: string; name: string; price: number; images: string | string[]; badge: string | null; sizes: string[] }) => ({
-          id: p.slug, // Use slug as ID for product page links
-          name: p.name,
-          price: p.price,
-          image: Array.isArray(p.images) ? p.images[0] : p.images,
-          badge: p.badge,
-          sizes: p.sizes,
-        }))
-      }
+
+    if (dbProducts && dbProducts.length > 0) {
+      // Transform database products to match ProductCard format
+      products = dbProducts.map((p) => ({
+        id: p.slug,
+        name: p.name,
+        price: p.price,
+        image: Array.isArray(p.images) ? (p.images as string[])[0] : (p.images as string),
+        badge: p.badge ?? undefined,
+        sizes: p.sizes as string[],
+      }))
     }
   } catch (error) {
-    console.error('Failed to fetch products:', error)
+    console.error('Failed to fetch products from database:', error)
   }
 
   return (

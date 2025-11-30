@@ -13,22 +13,69 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
-import { products } from "@/lib/product-data"
-import { blogPosts } from "@/lib/blog-data"
 import { Package, FileText, Users, DollarSign, LogOut, Lock } from "lucide-react"
 import { AdminNotifications } from "@/components/admin-notifications"
+
+interface Product {
+  id: string
+  name: string
+  price: number
+  category: string
+  badge?: string | null
+  inStock: boolean
+}
+
+interface BlogPost {
+  id: string
+  title: string
+  excerpt: string
+  author: string
+  category: string
+  featured: boolean
+  publishedAt: string
+}
 
 export default function AdminDashboard() {
   const router = useRouter()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+  const [products, setProducts] = useState<Product[]>([])
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
+  const [loading, setLoading] = useState(true)
+
+  const fetchData = async () => {
+    try {
+      setLoading(true)
+      const [productsRes, blogPostsRes] = await Promise.all([
+        fetch('/api/admin/products'),
+        fetch('/api/admin/blog-posts'),
+      ])
+
+      if (productsRes.ok) {
+        const productsData = await productsRes.json()
+        setProducts(productsData)
+      }
+
+      if (blogPostsRes.ok) {
+        const blogPostsData = await blogPostsRes.json()
+        setBlogPosts(blogPostsData)
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
     // Check if already authenticated in session storage
     const auth = sessionStorage.getItem('admin-authenticated')
     if (auth === 'true') {
       setIsAuthenticated(true)
+      fetchData()
+    } else {
+      setLoading(false)
     }
   }, [])
 
@@ -39,6 +86,7 @@ export default function AdminDashboard() {
       sessionStorage.setItem('admin-authenticated', 'true')
       setIsAuthenticated(true)
       setError("")
+      fetchData()
     } else {
       setError("Invalid password")
     }
@@ -245,7 +293,9 @@ export default function AdminDashboard() {
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">7</div>
+                <div className="text-2xl font-bold">
+                  {new Set([...products.map(p => p.category), ...blogPosts.map(b => b.category)]).size}
+                </div>
                 <p className="text-xs text-muted-foreground">Product & blog categories</p>
               </CardContent>
             </Card>
@@ -257,7 +307,7 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  ${Math.round(products.reduce((sum, p) => sum + p.price, 0) / products.length)}
+                  ${products.length > 0 ? Math.round(products.reduce((sum, p) => sum + p.price, 0) / products.length) : 0}
                 </div>
                 <p className="text-xs text-muted-foreground">Across inventory</p>
               </CardContent>
@@ -283,28 +333,34 @@ export default function AdminDashboard() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {products.map((product) => (
-                      <div key={product.id} className="flex items-center justify-between p-4 border rounded-lg">
-                        <div className="flex items-center gap-4">
-                          <div className="w-16 h-16 bg-gray-100 rounded-lg"></div>
-                          <div>
-                            <h4 className="font-semibold">{product.name}</h4>
-                            <div className="flex gap-2 mt-1">
-                              <Badge variant="outline" className="capitalize">{product.category}</Badge>
-                              {product.badge && (
-                                <Badge className="bg-[#d4a055]">{product.badge}</Badge>
-                              )}
+                  {loading ? (
+                    <p className="text-center text-gray-600 py-4">Loading products...</p>
+                  ) : products.length === 0 ? (
+                    <p className="text-center text-gray-600 py-4">No products found. Add products from the Products management page.</p>
+                  ) : (
+                    <div className="space-y-4">
+                      {products.map((product) => (
+                        <div key={product.id} className="flex items-center justify-between p-4 border rounded-lg">
+                          <div className="flex items-center gap-4">
+                            <div className="w-16 h-16 bg-gray-100 rounded-lg"></div>
+                            <div>
+                              <h4 className="font-semibold">{product.name}</h4>
+                              <div className="flex gap-2 mt-1">
+                                <Badge variant="outline" className="capitalize">{product.category}</Badge>
+                                {product.badge && (
+                                  <Badge className="bg-[#d4a055]">{product.badge}</Badge>
+                                )}
+                              </div>
                             </div>
                           </div>
+                          <div className="text-right">
+                            <p className="font-bold text-lg">${product.price}</p>
+                            <p className="text-sm text-gray-600">{product.inStock ? 'In Stock' : 'Out of Stock'}</p>
+                          </div>
                         </div>
-                        <div className="text-right">
-                          <p className="font-bold text-lg">${product.price}</p>
-                          <p className="text-sm text-gray-600">{product.inStock ? 'In Stock' : 'Out of Stock'}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
@@ -319,25 +375,31 @@ export default function AdminDashboard() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {blogPosts.map((post) => (
-                      <div key={post.id} className="p-4 border rounded-lg">
-                        <div className="flex justify-between items-start mb-2">
-                          <h4 className="font-semibold">{post.title}</h4>
-                          {post.featured && (
-                            <Badge className="bg-[#d4a055]">Featured</Badge>
-                          )}
+                  {loading ? (
+                    <p className="text-center text-gray-600 py-4">Loading blog posts...</p>
+                  ) : blogPosts.length === 0 ? (
+                    <p className="text-center text-gray-600 py-4">No blog posts found. Add posts from the Blog Posts management page.</p>
+                  ) : (
+                    <div className="space-y-4">
+                      {blogPosts.map((post) => (
+                        <div key={post.id} className="p-4 border rounded-lg">
+                          <div className="flex justify-between items-start mb-2">
+                            <h4 className="font-semibold">{post.title}</h4>
+                            {post.featured && (
+                              <Badge className="bg-[#d4a055]">Featured</Badge>
+                            )}
+                          </div>
+                          <p className="text-sm text-gray-600 mb-2">{post.excerpt}</p>
+                          <div className="flex gap-2 text-xs text-gray-500">
+                            <Badge variant="outline" className="capitalize">{post.category}</Badge>
+                            <span>{post.author}</span>
+                            <span>•</span>
+                            <span>{new Date(post.publishedAt).toLocaleDateString()}</span>
+                          </div>
                         </div>
-                        <p className="text-sm text-gray-600 mb-2">{post.excerpt}</p>
-                        <div className="flex gap-2 text-xs text-gray-500">
-                          <Badge variant="outline" className="capitalize">{post.category}</Badge>
-                          <span>{post.author}</span>
-                          <span>•</span>
-                          <span>{post.date}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
