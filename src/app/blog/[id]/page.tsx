@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { getBlogPost } from "@/lib/blog-data"
+import { getBlogPost, blogPosts } from "@/lib/blog-data"
 import { Calendar, User, ArrowLeft, Heart, MessageCircle, Share2 } from "lucide-react"
 
 export default function BlogPostPage() {
@@ -93,7 +93,7 @@ export default function BlogPostPage() {
   }
 
   const relatedPosts = blogPosts
-    .filter(p => p.category === post.category && p.id !== post.id)
+    .filter(p => p.category === post.category && p.id !== post.id && p.slug !== post.slug)
     .slice(0, 3)
 
   const handleLike = () => {
@@ -271,7 +271,7 @@ export default function BlogPostPage() {
                 <h2 className="text-2xl font-bold mb-6">Related Posts</h2>
                 <div className="grid md:grid-cols-3 gap-6">
                   {relatedPosts.map(related => (
-                    <Link key={related.id} href={`/blog/${related.id}`}>
+                    <Link key={related.id} href={`/blog/${related.slug}`}>
                       <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-full">
                         <div className="relative h-[150px]">
                           <Image

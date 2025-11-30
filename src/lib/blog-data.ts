@@ -1,5 +1,6 @@
 export interface BlogPost {
   id: string
+  slug: string
   title: string
   excerpt: string
   content: string
@@ -14,6 +15,7 @@ export interface BlogPost {
 export const blogPosts: BlogPost[] = [
   {
     id: "welcome-to-village",
+    slug: "welcome-to-village",
     title: "Welcome to The Village: Building Our Community",
     excerpt: "Discover the story behind The Village and what makes our community special. Learn about our mission, values, and the journey ahead.",
     content: `
@@ -50,6 +52,7 @@ Thank you for being part of The Village. Together, we're building something spec
   },
   {
     id: "new-merch-drop",
+    slug: "new-merch-drop",
     title: "New Merchandise Drop: Winter Collection 2025",
     excerpt: "Check out our latest winter collection featuring exclusive designs, premium materials, and limited edition pieces you won't want to miss.",
     content: `
@@ -87,6 +90,7 @@ Head over to our shop and grab your favorites before they sell out. Discord memb
   },
   {
     id: "community-meetup",
+    slug: "community-meetup",
     title: "Community Meetup: Join Us This Weekend",
     excerpt: "We're hosting our monthly community meetup! Connect with fellow members, enjoy exclusive perks, and be part of something bigger.",
     content: `
@@ -127,6 +131,7 @@ See you there!
   },
   {
     id: "styling-guide",
+    slug: "styling-guide",
     title: "Style Guide: How to Rock Your Village Merch",
     excerpt: "Get inspired with our styling tips and tricks. Learn how to incorporate Village merch into your everyday wardrobe with confidence.",
     content: `
@@ -167,6 +172,7 @@ Don't be afraid to mix Village pieces with your existing wardrobe. Our versatile
   },
   {
     id: "member-spotlight",
+    slug: "member-spotlight",
     title: "Member Spotlight: Stories from The Village",
     excerpt: "Meet some of our incredible community members and hear their stories about what The Village means to them.",
     content: `
@@ -200,6 +206,7 @@ Want to be featured in our next spotlight? Share your Village story on Discord w
   },
   {
     id: "holiday-giveaway",
+    slug: "holiday-giveaway",
     title: "Holiday Giveaway: Win Exclusive Village Gear",
     excerpt: "Enter our holiday giveaway for a chance to win exclusive Village merchandise and special edition items. Limited time only!",
     content: `
@@ -247,6 +254,7 @@ Get extra entries by:
   },
   {
     id: "quality-matters",
+    slug: "quality-matters",
     title: "Quality Matters: Behind Our Manufacturing Process",
     excerpt: "Take a look behind the scenes at how we create our premium merchandise, from design to production to your doorstep.",
     content: `
@@ -295,6 +303,7 @@ We're committed to reducing our environmental impact through:
   },
   {
     id: "discord-community",
+    slug: "discord-community",
     title: "Join Our Discord: Connect with The Village Online",
     excerpt: "Our Discord community is growing! Join thousands of members for exclusive drops, giveaways, and daily conversations.",
     content: `
@@ -344,8 +353,8 @@ New channels and features are added regularly based on member feedback. Have an 
   },
 ]
 
-export function getBlogPost(id: string): BlogPost | undefined {
-  return blogPosts.find(post => post.id === id)
+export function getBlogPost(slug: string): BlogPost | undefined {
+  return blogPosts.find(post => post.slug === slug || post.id === slug)
 }
 
 export function getBlogPostsByCategory(category: string): BlogPost[] {
