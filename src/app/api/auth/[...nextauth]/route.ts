@@ -2,6 +2,9 @@ import NextAuth, { NextAuthOptions } from "next-auth"
 import DiscordProvider from "next-auth/providers/discord"
 import { prisma } from "@/lib/prisma"
 
+// Normalize NEXTAUTH_URL by removing trailing slash if present
+const nextAuthUrl = process.env.NEXTAUTH_URL?.replace(/\/$/, "") || ""
+
 export const authOptions: NextAuthOptions = {
   providers: [
     DiscordProvider({
@@ -14,6 +17,8 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  // Enable debug mode in development to help diagnose OAuth issues
+  debug: process.env.NODE_ENV === "development",
   callbacks: {
     async signIn({ user, account, profile }) {
       if (!account || !profile) return true
@@ -73,7 +78,7 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: "/",
-    error: "/",
+    error: "/auth/error",
   },
   session: {
     strategy: "jwt",
