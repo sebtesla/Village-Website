@@ -1,30 +1,99 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { useParams, useRouter } from "next/navigation"
+import { useParams } from "next/navigation"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { getProduct, getRelatedProducts } from "@/lib/product-data"
+import { getProduct as getStaticProduct, getRelatedProducts, Product } from "@/lib/product-data"
 import { ArrowLeft, ShoppingCart, Heart, Truck, Shield, RefreshCw } from "lucide-react"
 import { ProductCard } from "@/components/product-card"
 import { useCartStore } from "@/store/cart-store"
 
+interface DatabaseProduct {
+  id: string
+  name: string
+  slug: string
+  description: string
+  price: number
+  category: string
+  images: string[]
+  sizes: string[]
+  colors: string[]
+  badge: string | null
+  inStock: boolean
+  features: string[]
+}
+
 export default function ProductDetailPage() {
   const params = useParams()
-  const router = useRouter()
-  const product = getProduct(params.id as string)
   const { addItem } = useCartStore()
+  const [product, setProduct] = useState<Product | null>(null)
+  const [loading, setLoading] = useState(true)
   const [selectedImage, setSelectedImage] = useState(0)
   const [selectedSize, setSelectedSize] = useState("")
   const [selectedColor, setSelectedColor] = useState("")
   const [quantity, setQuantity] = useState(1)
   const [addedToCart, setAddedToCart] = useState(false)
+
+  useEffect(() => {
+    async function fetchProduct() {
+      const slug = params.id as string
+
+      // First try to get from static data
+      const staticProduct = getStaticProduct(slug)
+      if (staticProduct) {
+        setProduct(staticProduct)
+        setLoading(false)
+        return
+      }
+
+      // If not found in static data, try to fetch from database
+      try {
+        const response = await fetch(`/api/products/${slug}`)
+        if (response.ok) {
+          const dbProduct: DatabaseProduct = await response.json()
+          // Transform database product to match static product format
+          const transformedProduct: Product = {
+            id: dbProduct.slug,
+            name: dbProduct.name,
+            description: dbProduct.description,
+            price: dbProduct.price,
+            category: dbProduct.category,
+            images: dbProduct.images,
+            sizes: dbProduct.sizes,
+            colors: dbProduct.colors,
+            badge: dbProduct.badge || undefined,
+            inStock: dbProduct.inStock,
+            features: dbProduct.features,
+          }
+          setProduct(transformedProduct)
+        }
+      } catch (error) {
+        console.error('Failed to fetch product:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProduct()
+  }, [params.id])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 container mx-auto px-4 py-12 text-center">
+          <p className="text-gray-600">Loading product...</p>
+        </main>
+        <Footer />
+      </div>
+    )
+  }
 
   if (!product) {
     return (
