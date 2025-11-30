@@ -3,8 +3,8 @@
 ## ✅ What I've Done
 
 I've configured your Discord OAuth locally with these credentials:
-- **Discord Client ID:** 1334996493198692454
-- **Discord Secret:** DzuOKEqqIfGdQQoJlXlbn2Ve5Vz6IPdO
+- **Discord Client ID:** (configured in Netlify environment)
+- **Discord Secret:** (configured in Netlify environment)
 - **Generated NextAuth Secret:** Ready
 - **Updated .env.local:** ✅ Complete
 
@@ -30,9 +30,9 @@ Go to: https://app.netlify.com/
 3. Add these 4 variables (click "Add a variable" for each):
 
 ```
-NEXT_PUBLIC_DISCORD_CLIENT_ID = 1334996493198692454
-DISCORD_CLIENT_SECRET = DzuOKEqqIfGdQQoJlXlbn2Ve5Vz6IPdO
-NEXTAUTH_SECRET = 8f9e7d6c5b4a3210fedcba9876543210abcdef1234567890fedcba9876543210
+NEXT_PUBLIC_DISCORD_CLIENT_ID = <your-discord-client-id>
+DISCORD_CLIENT_SECRET = <your-discord-client-secret>
+NEXTAUTH_SECRET = <your-generated-nextauth-secret>
 NEXTAUTH_URL = https://therustvillage.netlify.app
 ```
 
@@ -64,13 +64,13 @@ https://therustvillage.netlify.app/api/auth/callback/discord
 **Netlify Variables:**
 ```
 NEXT_PUBLIC_DISCORD_CLIENT_ID
-1334996493198692454
+<your-discord-client-id>
 
 DISCORD_CLIENT_SECRET
-DzuOKEqqIfGdQQoJlXlbn2Ve5Vz6IPdO
+<your-discord-client-secret>
 
 NEXTAUTH_SECRET
-8f9e7d6c5b4a3210fedcba9876543210abcdef1234567890fedcba9876543210
+<your-generated-nextauth-secret>
 
 NEXTAUTH_URL
 https://therustvillage.netlify.app
