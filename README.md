@@ -1,280 +1,294 @@
-# 🏪 The Village Merch Store
+# 🏘️ The Village Merch Store
 
-A full-featured e-commerce Progressive Web App built with Next.js, featuring Discord authentication, Stripe payments, and a complete admin dashboard.
+> Premium e-commerce platform for The Village community
 
-![Next.js](https://img.shields.io/badge/Next.js-15.3-black?logo=next.js)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue?logo=typescript)
-![Prisma](https://img.shields.io/badge/Prisma-5.22-2D3748?logo=prisma)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?logo=tailwind-css)
+[![Live Demo](https://img.shields.io/badge/demo-live-success)](https://therustvillage.netlify.app)
+[![Built with Same](https://img.shields.io/badge/built%20with-Same-blue)](https://same.new)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 ## ✨ Features
 
-### 🛒 E-Commerce
-- Product catalog with categories and filtering
-- Product detail pages with image galleries
-- Shopping cart with persistent state (Zustand + localStorage)
-- Size and color variant selection
-- Free shipping on orders over $75
+### 🛍️ E-Commerce
+- **12+ Premium Products** - Hats, apparel, and accessories
+- **Shopping Cart** - Persistent cart with Zustand state management
+- **Stripe Checkout** - Secure payment processing
+- **Order Tracking** - Track orders with email notifications
+- **Discount Codes** - Promotional code system
 
-### 🔐 Authentication
-- Discord OAuth integration with NextAuth.js
-- Protected checkout (no guest checkout)
-- User session management
-- Profile display in header
+### 📝 Content Management
+- **Blog System** - 7+ blog posts with categories and tags
+- **Admin Panel** - Manage products, blog posts, and orders
+- **Database Seeding** - Quick setup with sample data
+- **Image Management** - Easy product image uploads
 
-### 💳 Payment Processing
-- Stripe Checkout integration
-- Secure payment processing
-- Order confirmation emails
-- Stripe webhook handling
+### 🔐 Authentication & Security
+- **NextAuth** - OAuth with Discord integration
+- **Role-based Access** - Admin and customer roles
+- **Secure Checkout** - PCI-compliant Stripe integration
 
-### 📊 Admin Dashboard
-- **Order Management**: View, search, and update all orders
-- **Analytics Dashboard**: Revenue tracking, charts, and metrics
-- **Product Management**: View and manage product catalog
-- **Blog Management**: Create and edit blog posts
-- **Real-time Notifications**: New order alerts with sound and browser notifications
-
-### 📧 Email Notifications
-- Order confirmation emails (React Email + Resend)
-- Shipping confirmation with tracking numbers
-- Beautiful branded email templates
-- Automated email sending via webhooks
-
-### 💾 Database
-- PostgreSQL with Prisma ORM
-- Complete data models for products, orders, users, blog posts
-- Database migrations and seeding
-- Prisma Studio for database management
-
-### 📱 Progressive Web App (PWA)
-- Installable on mobile and desktop
-- Offline support with service workers
-- Custom install prompts for all platforms
-- App shortcuts (Shop, Track Order, Cart)
-- Standalone app mode
-
-### 📝 Blog & Community
-- Full-featured blog with categories
-- Individual blog post pages with comments
-- Featured posts section
-- Category filtering
-
-### 📦 Order Tracking
-- Customer order tracking page
-- Track by order number and email
-- Visual order status timeline
-- Complete order history
-
-### 📄 Content Pages
-- **About Page**: Company story, values, and promises
-- **Shop Page**: Product catalog with category filters
-- **Blog Page**: Articles and community content
-- **Map Page**: External link integration
+### 🎨 Design & UX
+- **Responsive Design** - Mobile-first approach
+- **Tailwind CSS** - Modern, customizable styling
+- **shadcn/ui Components** - Accessible, beautiful UI
+- **PWA Support** - Install as mobile app
+- **Custom Favicon** - Brand identity
 
 ## 🚀 Tech Stack
 
-- **Framework**: Next.js 15.3 with App Router
-- **Language**: TypeScript 5.8
-- **Styling**: Tailwind CSS 3.4 + shadcn/ui
-- **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: NextAuth.js with Discord
-- **Payments**: Stripe Checkout + Webhooks
-- **Email**: Resend + React Email
-- **State Management**: Zustand
-- **PWA**: next-pwa
-- **Charts**: Recharts
-- **Package Manager**: Bun
+- **Framework:** Next.js 15 (App Router)
+- **Language:** TypeScript
+- **Database:** PostgreSQL (Supabase)
+- **ORM:** Prisma
+- **Authentication:** NextAuth.js
+- **Payments:** Stripe
+- **Styling:** Tailwind CSS
+- **UI Components:** shadcn/ui
+- **State Management:** Zustand
+- **Deployment:** Netlify
+- **Runtime:** Bun
 
 ## 📦 Installation
 
+### Prerequisites
+- Node.js 18+ or Bun
+- PostgreSQL database (or Supabase account)
+- Stripe account
+- Discord OAuth app (optional)
+
+### Quick Start
+
+1. **Clone the repository**
 ```bash
-# Clone the repository
-git clone https://github.com/YOUR_USERNAME/village-merch-store.git
-cd village-merch-store
-
-# Install dependencies
-bun install
-
-# Set up environment variables
-cp .env.example .env.local
-# Edit .env.local with your values
-
-# Set up database
-bunx prisma migrate dev
-bun run db:seed
-
-# Start development server
-bun run dev
+git clone https://github.com/sebtesla/the-village-merch-store.git
+cd the-village-merch-store
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+2. **Install dependencies**
+```bash
+bun install
+```
 
-## 🔧 Environment Variables
+3. **Set up environment variables**
+```bash
+cp .env.example .env.local
+```
 
-Create a `.env.local` file with these variables:
-
+Edit `.env.local` with your credentials:
 ```env
 # Database
 DATABASE_URL="postgresql://..."
 
-# Discord OAuth
-NEXT_PUBLIC_DISCORD_CLIENT_ID=your_client_id
-DISCORD_CLIENT_SECRET=your_client_secret
-NEXTAUTH_SECRET=your_nextauth_secret
-NEXTAUTH_URL=http://localhost:3000
+# NextAuth
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-secret-here"
+
+# Discord OAuth (optional)
+DISCORD_CLIENT_ID="your-discord-client-id"
+DISCORD_CLIENT_SECRET="your-discord-client-secret"
 
 # Stripe
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_xxx
-STRIPE_SECRET_KEY=sk_test_xxx
-STRIPE_WEBHOOK_SECRET=whsec_xxx
-
-# Email (Resend)
-RESEND_API_KEY=re_xxx
-EMAIL_FROM=orders@yourdomain.com
-
-# Admin
-ADMIN_PASSWORD=your_secure_password
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_test_..."
+STRIPE_SECRET_KEY="sk_test_..."
+STRIPE_WEBHOOK_SECRET="whsec_..."
 ```
 
-See `.env.example` for the complete template.
+4. **Set up the database**
+```bash
+# Generate Prisma client
+bun run prisma generate
 
-## 📚 Documentation
+# Run migrations
+bun run db:migrate
 
-- [Setup Guide](./SETUP_GUIDE.md) - Complete setup instructions
-- [Database Setup](./DATABASE_SETUP.md) - PostgreSQL & Prisma setup
-- [Discord OAuth Setup](./DISCORD_OAUTH_SETUP.md) - Authentication setup
-- [Stripe Setup](./STRIPE_SETUP.md) - Payment processing setup
-- [Email Setup](./EMAIL_SETUP.md) - Email notifications setup
-- [Admin Features](./ADMIN_FEATURES.md) - Admin dashboard guide
-- [Customer Features](./CUSTOMER_FEATURES.md) - User experience guide
-- [PWA Guide](./PWA_GUIDE.md) - Progressive Web App features
-- [Deployment Guide](./DEPLOYMENT_GUIDE.md) - Deploy to production
+# Seed with sample data
+bun run db:seed
+```
 
-## 🚀 Deployment
+5. **Start the development server**
+```bash
+bun run dev
+```
 
-### Quick Deploy to Vercel
+Visit [http://localhost:3000](http://localhost:3000)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/village-merch-store)
+## 📁 Project Structure
 
-1. Click the button above
-2. Add environment variables
-3. Deploy!
+```
+the-village-merch-store/
+├── prisma/
+│   ├── schema.prisma      # Database schema
+│   └── seed.ts            # Sample data
+├── public/
+│   ├── icons/             # PWA icons
+│   └── screenshots/       # PWA screenshots
+├── src/
+│   ├── app/
+│   │   ├── admin/         # Admin panel
+│   │   ├── api/           # API routes
+│   │   ├── blog/          # Blog pages
+│   │   ├── cart/          # Shopping cart
+│   │   ├── products/      # Product pages
+│   │   └── shop/          # Shop page
+│   ├── components/
+│   │   ├── ui/            # shadcn/ui components
+│   │   ├── header.tsx
+│   │   └── footer.tsx
+│   ├── lib/
+│   │   ├── prisma.ts      # Database client
+│   │   └── utils.ts
+│   └── store/
+│       └── cart-store.ts  # Zustand store
+├── next.config.js
+├── tailwind.config.ts
+└── package.json
+```
 
-See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) for detailed instructions.
+## 🎯 Key Features Guide
+
+### Admin Panel
+Access at `/admin` with admin credentials:
+- Product Management
+- Blog Post Management
+- Order Analytics
+- Database Seeding
+- Discount Code Management
+
+### Product Management
+1. Navigate to Admin → Products
+2. View all products with images and stock status
+3. Upload product images (URLs or file uploads)
+4. See the [Product Management Guide](PRODUCT_MANAGEMENT.md)
+
+### Blog System
+- Create and manage blog posts
+- Categories: community, events, merchandise, updates
+- Featured posts support
+- Markdown content support
+
+### Payment Processing
+- Integrated with Stripe Checkout
+- Automatic order creation on successful payment
+- Email notifications via Resend
+- Order tracking system
 
 ## 🗄️ Database Schema
 
-The application uses the following main models:
+```prisma
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  description String
+  price       Decimal
+  category    String
+  images      String[]
+  sizes       String[]
+  colors      String[]
+  badge       String?
+  inStock     Boolean  @default(true)
+  featured    Boolean  @default(false)
+  features    String[]
+}
 
-- **User**: Discord authenticated users
-- **Product**: Merchandise catalog
-- **Order**: Customer orders with items
-- **BlogPost**: Blog articles and content
-- **BlogComment**: User comments on posts
+model BlogPost {
+  id       String   @id @default(uuid())
+  slug     String   @unique
+  title    String
+  excerpt  String
+  content  String
+  author   String
+  category String
+  image    String
+  featured Boolean  @default(false)
+  tags     String[]
+}
 
-Run `bunx prisma studio` to explore the database visually.
-
-## 📱 Progressive Web App
-
-The store can be installed as an app on:
-- ✅ iOS (Safari)
-- ✅ Android (Chrome)
-- ✅ Desktop (Chrome/Edge)
-
-Features include:
-- Offline support
-- Install prompts
-- App shortcuts
-- Standalone mode
-
-## 🛠️ Development
-
-```bash
-# Run development server
-bun run dev
-
-# Build for production
-bun run build
-
-# Start production server
-bun run start
-
-# Run linter
-bun run lint
-
-# Database commands
-bun run db:migrate   # Run migrations
-bun run db:studio    # Open Prisma Studio
-bun run db:seed      # Seed database
+// ... and more (Order, User, etc.)
 ```
 
-## 🎨 Features Highlights
+## 🔧 Configuration
 
-### Admin Dashboard
-- Password-protected access
-- Real-time order notifications
-- Revenue analytics with charts
-- Order status management
-- Tracking number updates
-- Automated shipping emails
+### Database Setup
+See [DATABASE_SETUP.md](DATABASE_SETUP.md) for detailed instructions.
 
-### Customer Experience
-- Discord login required for checkout
-- Persistent shopping cart
-- Order tracking by email and order number
-- Email notifications for orders and shipping
-- PWA install prompts
-- Responsive design
+### Discord OAuth
+See [DISCORD_OAUTH_SETUP.md](DISCORD_OAUTH_SETUP.md) for Discord app setup.
 
-### Payment Flow
-1. Add items to cart
-2. Sign in with Discord
-3. Checkout via Stripe
-4. Receive confirmation email
-5. Track order status
-6. Receive shipping notification
+### Stripe Integration
+See [STRIPE_SETUP.md](STRIPE_SETUP.md) for payment configuration.
 
-## 📊 Admin Access
+### Email Notifications
+See [EMAIL_SETUP.md](EMAIL_SETUP.md) for Resend configuration.
 
-Default admin credentials:
-- URL: `/admin`
-- Password: `admin123` (change in production!)
+## 🚀 Deployment
 
-Admin features:
-- Order management with search and filters
-- Analytics dashboard with revenue charts
-- Product and blog post management
-- Real-time new order notifications
+### Deploy to Netlify
 
-## 🔒 Security
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/sebtesla/the-village-merch-store)
 
-- Environment variables for secrets
-- Discord OAuth for authentication
-- Stripe for secure payments
-- NextAuth.js session management
-- SQL injection protection (Prisma)
-- XSS protection (React)
+1. Connect your GitHub repository
+2. Add environment variables
+3. Deploy!
 
-## 📄 License
+See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for detailed instructions.
 
-This project is open source and available under the [MIT License](LICENSE).
+### Environment Variables for Production
+Make sure to set all required environment variables in your Netlify dashboard.
 
-## 🙏 Acknowledgments
+## 📸 Screenshots
 
-- Built with [Next.js](https://nextjs.org/)
-- UI components from [shadcn/ui](https://ui.shadcn.com/)
-- Icons from [Lucide](https://lucide.dev/)
-- Images from [Unsplash](https://unsplash.com/)
+### Homepage
+![Homepage](https://via.placeholder.com/800x400?text=Homepage+Screenshot)
+
+### Shop Page
+![Shop](https://via.placeholder.com/800x400?text=Shop+Page+Screenshot)
+
+### Admin Panel
+![Admin](https://via.placeholder.com/800x400?text=Admin+Panel+Screenshot)
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+This is a personal project, but suggestions and feedback are welcome!
 
-## 📧 Support
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-For support, email support@thevillagemerch.com or join our Discord community.
+## 📝 Documentation
+
+- [Quick Setup Guide](QUICK_SETUP.md)
+- [Product Management](PRODUCT_MANAGEMENT.md)
+- [Blog Management](BLOG_MANAGEMENT.md)
+- [Database Setup](DATABASE_SETUP.md)
+- [Discord OAuth Setup](DISCORD_OAUTH_SETUP.md)
+- [Stripe Setup](STRIPE_SETUP.md)
+- [Email Setup](EMAIL_SETUP.md)
+- [PWA Guide](PWA_GUIDE.md)
+- [Deployment Guide](DEPLOYMENT_GUIDE.md)
+
+## 🐛 Known Issues
+
+- TypeScript `minimatch` error in linter (non-blocking)
+- Some hydration warnings in development mode
+
+## 📄 License
+
+MIT License - feel free to use this project as a template for your own store!
+
+## 🙏 Acknowledgments
+
+- Built with [Same](https://same.new) - AI-powered development platform
+- UI components from [shadcn/ui](https://ui.shadcn.com)
+- Icons from [Lucide](https://lucide.dev)
+
+## 🔗 Links
+
+- **Live Demo:** https://therustvillage.netlify.app
+- **GitHub:** https://github.com/sebtesla/the-village-merch-store
+- **Built with:** [Same.new](https://same.new)
 
 ---
 
-**Built with ❤️ for The Village Community**
+**Made with ❤️ for The Village community**
