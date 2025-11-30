@@ -102,7 +102,7 @@ export default async function Home() {
       const dbProducts = await response.json()
       if (dbProducts && dbProducts.length > 0) {
         // Transform database products to match ProductCard format
-        products = dbProducts.map((p: any) => ({
+        products = dbProducts.map((p: { slug: string; name: string; price: number; images: string | string[]; badge: string | null; sizes: string[] }) => ({
           id: p.slug, // Use slug as ID for product page links
           name: p.name,
           price: p.price,

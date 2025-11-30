@@ -39,30 +39,30 @@ export default function BlogPostPage() {
   const [newComment, setNewComment] = useState("")
 
   useEffect(() => {
-    fetchPost()
-  }, [slug])
-
-  const fetchPost = async () => {
-    try {
-      // Try fetching from database first
-      const response = await fetch(`/api/blog-posts/${slug}`)
-      if (response.ok) {
-        const data = await response.json()
-        setPost(data)
-      } else {
+    const fetchPost = async () => {
+      try {
+        // Try fetching from database first
+        const response = await fetch(`/api/blog-posts/${slug}`)
+        if (response.ok) {
+          const data = await response.json()
+          setPost(data)
+        } else {
+          // Fallback to static data
+          const staticPost = getBlogPost(slug)
+          setPost(staticPost)
+        }
+      } catch (error) {
+        console.error('Failed to fetch blog post:', error)
         // Fallback to static data
         const staticPost = getBlogPost(slug)
         setPost(staticPost)
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      console.error('Failed to fetch blog post:', error)
-      // Fallback to static data
-      const staticPost = getBlogPost(slug)
-      setPost(staticPost)
-    } finally {
-      setLoading(false)
     }
-  }
+
+    fetchPost()
+  }, [slug])
 
   if (loading) {
     return (

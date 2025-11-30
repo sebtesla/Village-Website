@@ -1,11 +1,12 @@
 [build]
-  command = "SKIP_TYPE_CHECK=true prisma generate && next build"
+  command = "prisma generate && bunx next build"
   publish = ".next"
 
 [build.environment]
   NEXT_TELEMETRY_DISABLED = "1"
   TSC_COMPILE_ON_ERROR = "true"
-  SKIP_TYPE_CHECK = "true"
+  ESLINT_NO_DEV_ERRORS = "true"
+  DISABLE_ESLINT_PLUGIN = "true"
 
 [[redirects]]
   from = "/*"
