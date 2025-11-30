@@ -55,7 +55,10 @@ export default function BlogPostsPage() {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreateDialog, setShowCreateDialog] = useState(false)
+  const [showEditDialog, setShowEditDialog] = useState(false)
+  const [editingPost, setEditingPost] = useState<BlogPost | null>(null)
   const [creating, setCreating] = useState(false)
+  const [updating, setUpdating] = useState(false)
 
   // Form state
   const [formData, setFormData] = useState({
@@ -65,6 +68,19 @@ export default function BlogPostsPage() {
     content: '',
     author: 'The Village Team',
     category: 'updates',
+    image: '',
+    featured: false,
+    tags: '',
+  })
+
+  // Edit form state
+  const [editFormData, setEditFormData] = useState({
+    title: '',
+    slug: '',
+    excerpt: '',
+    content: '',
+    author: '',
+    category: '',
     image: '',
     featured: false,
     tags: '',
@@ -188,6 +204,59 @@ export default function BlogPostsPage() {
       await fetchBlogPosts()
     } catch (error: any) {
       alert(error.message)
+    }
+  }
+
+  const handleEditClick = (post: BlogPost) => {
+    setEditingPost(post)
+    setEditFormData({
+      title: post.title,
+      slug: post.slug,
+      excerpt: post.excerpt,
+      content: post.content,
+      author: post.author,
+      category: post.category,
+      image: post.image,
+      featured: post.featured,
+      tags: post.tags.join(', '),
+    })
+    setShowEditDialog(true)
+  }
+
+  const handleUpdatePost = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!editingPost) return
+    setUpdating(true)
+
+    try {
+      const response = await fetch(`/api/admin/blog-posts/${editingPost.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: editFormData.title,
+          slug: editFormData.slug,
+          excerpt: editFormData.excerpt,
+          content: editFormData.content,
+          author: editFormData.author,
+          category: editFormData.category,
+          image: editFormData.image,
+          featured: editFormData.featured,
+          tags: editFormData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+        }),
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || 'Failed to update blog post')
+      }
+
+      await fetchBlogPosts()
+      setShowEditDialog(false)
+      setEditingPost(null)
+    } catch (error: any) {
+      alert(error.message)
+    } finally {
+      setUpdating(false)
     }
   }
 
@@ -329,6 +398,13 @@ export default function BlogPostsPage() {
                           onClick={() => handleToggleFeatured(post.id, post.featured)}
                         >
                           {post.featured ? 'Unfeature' : 'Feature'}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleEditClick(post)}
+                        >
+                          <Edit2 className="h-4 w-4" />
                         </Button>
                         <Link href={`/blog/${post.slug}`} target="_blank">
                           <Button variant="outline" size="sm">
@@ -484,6 +560,138 @@ export default function BlogPostsPage() {
               </Button>
               <Button type="submit" disabled={creating}>
                 {creating ? 'Creating...' : 'Publish Post'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Dialog */}
+      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Edit Blog Post</DialogTitle>
+            <DialogDescription>
+              Update the blog post content
+            </DialogDescription>
+          </DialogHeader>
+
+          <form onSubmit={handleUpdatePost} className="space-y-4">
+            <div>
+              <Label htmlFor="edit-title">Title *</Label>
+              <Input
+                id="edit-title"
+                value={editFormData.title}
+                onChange={(e) => setEditFormData({ ...editFormData, title: e.target.value })}
+                placeholder="Your Blog Post Title"
+                required
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="edit-slug">Slug</Label>
+              <Input
+                id="edit-slug"
+                value={editFormData.slug}
+                onChange={(e) => setEditFormData({ ...editFormData, slug: e.target.value })}
+                placeholder="your-post-slug"
+              />
+              <p className="text-xs text-gray-500 mt-1">URL: /blog/{editFormData.slug || 'your-post-slug'}</p>
+            </div>
+
+            <div>
+              <Label htmlFor="edit-excerpt">Excerpt *</Label>
+              <Textarea
+                id="edit-excerpt"
+                value={editFormData.excerpt}
+                onChange={(e) => setEditFormData({ ...editFormData, excerpt: e.target.value })}
+                placeholder="A short summary that appears in the blog list..."
+                rows={2}
+                required
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="edit-content">Content * (Markdown supported)</Label>
+              <Textarea
+                id="edit-content"
+                value={editFormData.content}
+                onChange={(e) => setEditFormData({ ...editFormData, content: e.target.value })}
+                placeholder="# Your Post Title&#10;&#10;Write your content here..."
+                rows={12}
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="edit-author">Author</Label>
+                <Input
+                  id="edit-author"
+                  value={editFormData.author}
+                  onChange={(e) => setEditFormData({ ...editFormData, author: e.target.value })}
+                  placeholder="The Village Team"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="edit-category">Category</Label>
+                <Select
+                  value={editFormData.category}
+                  onValueChange={(value) => setEditFormData({ ...editFormData, category: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="community">Community</SelectItem>
+                    <SelectItem value="merchandise">Merchandise</SelectItem>
+                    <SelectItem value="events">Events</SelectItem>
+                    <SelectItem value="updates">Updates</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="edit-image">Featured Image URL</Label>
+              <Input
+                id="edit-image"
+                value={editFormData.image}
+                onChange={(e) => setEditFormData({ ...editFormData, image: e.target.value })}
+                placeholder="https://i.imgur.com/yourimage.jpg"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="edit-tags">Tags (comma separated)</Label>
+              <Input
+                id="edit-tags"
+                value={editFormData.tags}
+                onChange={(e) => setEditFormData({ ...editFormData, tags: e.target.value })}
+                placeholder="tag1, tag2, tag3"
+              />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="edit-featured"
+                checked={editFormData.featured}
+                onChange={(e) => setEditFormData({ ...editFormData, featured: e.target.checked })}
+                className="w-4 h-4"
+              />
+              <Label htmlFor="edit-featured" className="cursor-pointer">
+                Feature this post on homepage
+              </Label>
+            </div>
+
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setShowEditDialog(false)}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={updating}>
+                {updating ? 'Saving...' : 'Save Changes'}
               </Button>
             </DialogFooter>
           </form>

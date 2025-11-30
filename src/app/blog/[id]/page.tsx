@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { getBlogPost } from "@/lib/blog-data"
+import { getBlogPost, blogPosts } from "@/lib/blog-data"
 import { Calendar, User, ArrowLeft, Heart, MessageCircle, Share2 } from "lucide-react"
 
 export default function BlogPostPage() {
@@ -93,7 +93,7 @@ export default function BlogPostPage() {
   }
 
   const relatedPosts = blogPosts
-    .filter(p => p.category === post.category && p.id !== post.id)
+    .filter(p => p.category === post.category && p.id !== post.id && p.id !== (post.slug || slug))
     .slice(0, 3)
 
   const handleLike = () => {
@@ -162,7 +162,7 @@ export default function BlogPostPage() {
               </span>
               <span className="flex items-center gap-2">
                 <Calendar className="h-5 w-5" />
-                {post.date}
+                {post.date || (post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '')}
               </span>
             </div>
 
