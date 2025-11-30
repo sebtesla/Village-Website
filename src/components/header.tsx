@@ -135,6 +135,12 @@ export function Header() {
                         <p className="text-sm text-gray-600">{session.user?.email}</p>
                       </div>
                     </div>
+                    <Link href="/account" className="w-full">
+                      <Button variant="default" className="w-full h-12 gap-2">
+                        <User className="h-5 w-5" />
+                        My Account
+                      </Button>
+                    </Link>
                     <Button
                       variant="outline"
                       className="w-full h-12 gap-2"
