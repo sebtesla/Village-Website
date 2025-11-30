@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="540" height="720" viewBox="0 0 540 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="540" height="720" fill="#f9fafb"/>
+
+  <!-- Header -->
+  <rect width="540" height="80" fill="#0d4a4a"/>
+  <text x="270" y="50" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#d4a055" text-anchor="middle">THE VILLAGE</text>
+
+  <!-- Hero Image -->
+  <rect y="80" width="540" height="300" fill="#c1d4d4"/>
+  <text x="270" y="240" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#0d4a4a" text-anchor="middle">SHOP</text>
+
+  <!-- Product Grid -->
+  <rect x="20" y="400" width="240" height="240" rx="8" fill="#e5e7eb"/>
+  <rect x="280" y="400" width="240" height="240" rx="8" fill="#e5e7eb"/>
+
+  <!-- Footer -->
+  <rect y="670" width="540" height="50" fill="#0d4a4a"/>
+</svg>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1280" height="720" fill="#f9fafb"/>
+
+  <!-- Header -->
+  <rect width="1280" height="80" fill="#0d4a4a"/>
+  <text x="640" y="50" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#d4a055" text-anchor="middle">THE VILLAGE - SHOP</text>
+
+  <!-- Product Grid -->
+  <rect x="40" y="120" width="280" height="280" rx="8" fill="#e5e7eb"/>
+  <rect x="340" y="120" width="280" height="280" rx="8" fill="#e5e7eb"/>
+  <rect x="640" y="120" width="280" height="280" rx="8" fill="#e5e7eb"/>
+  <rect x="940" y="120" width="280" height="280" rx="8" fill="#e5e7eb"/>
+
+  <rect x="40" y="420" width="280" height="280" rx="8" fill="#e5e7eb"/>
+  <rect x="340" y="420" width="280" height="280" rx="8" fill="#e5e7eb"/>
+  <rect x="640" y="420" width="280" height="280" rx="8" fill="#e5e7eb"/>
+  <rect x="940" y="420" width="280" height="280" rx="8" fill="#e5e7eb"/>
+</svg>

@@ -1,0 +1,49 @@
+
+                  DISCORD OAUTH SETUP CHECKLIST                       ║
+                     therustvillage.netlify.app                       ║
+
+
+
+
+ Navigate to: OAuth2 → General
+ Add Redirect: https://therustvillage.netlify.app/api/auth/callback/discord
+ Click "Save Changes"
+
+
+
+
+
+
+Add these 4 variables:
+
+
+ 1. NEXT_PUBLIC_DISCORD_CLIENT_ID                                  │
+    1334996493198692454                                             │
+
+ 2. DISCORD_CLIENT_SECRET                                           │
+    DzuOKEqqIfGdQQoJlXlbn2Ve5Vz6IPdO                                │
+
+ 3. NEXTAUTH_SECRET                                                 │
+    8f9e7d6c5b4a3210fedcba9876543210abcdef1234567890fedcba9876543210│
+
+ 4. NEXTAUTH_URL                                                    │
+    https://therustvillage.netlify.app                              │
+
+
+ Click "Add a variable" for each one
+ Netlify will automatically redeploy
+
+
+
+
+
+  Wait 2-3 minutes for Netlify to redeploy
+
+
+
+
+
+
+
+
+Total Time: 5 minutes | Difficulty: ⭐ Easy

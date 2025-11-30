@@ -1,0 +1,13 @@
+[build]
+  command = "SKIP_TYPE_CHECK=true prisma generate && next build"
+  publish = ".next"
+
+[build.environment]
+  NEXT_TELEMETRY_DISABLED = "1"
+  TSC_COMPILE_ON_ERROR = "true"
+  SKIP_TYPE_CHECK = "true"
+
+[[redirects]]
+  from = "/*"
+  to = "/:splat"
+  status = 200

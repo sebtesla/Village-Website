@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="256" fill="#0d4a4a"/>
+
+  <!-- Village houses -->
+  <!-- Left house -->
+  <path d="M140 280 L140 360 L200 360 L200 280 L170 240 Z" fill="#d4a055"/>
+  <rect x="155" y="310" width="15" height="25" fill="#0d4a4a"/>
+  <rect x="175" y="295" width="12" height="12" fill="#0d4a4a"/>
+
+  <!-- Center house (larger) -->
+  <path d="M210 260 L210 370 L290 370 L290 260 L250 210 Z" fill="#d4a055"/>
+  <rect x="235" y="310" width="30" height="60" fill="#0d4a4a"/>
+  <rect x="225" y="280" width="18" height="18" fill="#0d4a4a"/>
+  <rect x="267" y="280" width="18" height="18" fill="#0d4a4a"/>
+
+  <!-- Right house -->
+  <path d="M312 280 L312 360 L372 360 L372 280 L342 240 Z" fill="#d4a055"/>
+  <rect x="327" y="310" width="15" height="25" fill="#0d4a4a"/>
+  <rect x="345" y="295" width="12" height="12" fill="#0d4a4a"/>
+
+  <!-- Ground line -->
+  <rect x="120" y="370" width="272" height="8" fill="#d4a055"/>
+
+  <!-- "V" Letter overlay -->
+  <path d="M220 150 L250 230 L280 150" stroke="#d4a055" stroke-width="20" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

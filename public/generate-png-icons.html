@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate PNG Icons - The Village</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    h1 {
+      color: #0d4a4a;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    button {
+      background: #0d4a4a;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 10px 5px;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #0a3d3d;
+    }
+    .preview {
+      margin: 20px 0;
+      padding: 20px;
+      background: #f9f9f9;
+      border-radius: 4px;
+    }
+    canvas {
+      display: none;
+    }
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .icon-item {
+      text-align: center;
+    }
+    .icon-item img {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px;
+      background: white;
+    }
+    .status {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 4px;
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎨 The Village - Icon Generator</h1>
+    <p>This tool will convert your SVG icons to PNG format. Click the buttons below to generate and download the icons.</p>
+
+    <div class="preview">
+      <h3>Preview</h3>
+      <div id="preview-container"></div>
+    </div>
+
+    <h3>Generate Icons</h3>
+    <button onclick="generateIcon(512, 'icon.png')">Generate 512x512 (icon.png)</button>
+    <button onclick="generateIcon(180, 'apple-icon.png')">Generate 180x180 (apple-icon.png)</button>
+    <button onclick="generateIcon(192, 'icon-192x192.png')">Generate 192x192</button>
+    <button onclick="generateIcon(32, 'favicon-32x32.png')">Generate 32x32</button>
+    <button onclick="generateIcon(16, 'favicon-16x16.png')">Generate 16x16</button>
+
+    <div id="status"></div>
+
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <script>
+    const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="256" cy="256" r="256" fill="#0d4a4a"/>
+  <path d="M140 280 L140 360 L200 360 L200 280 L170 240 Z" fill="#d4a055"/>
+  <rect x="155" y="310" width="15" height="25" fill="#0d4a4a"/>
+  <rect x="175" y="295" width="12" height="12" fill="#0d4a4a"/>
+  <path d="M210 260 L210 370 L290 370 L290 260 L250 210 Z" fill="#d4a055"/>
+  <rect x="235" y="310" width="30" height="60" fill="#0d4a4a"/>
+  <rect x="225" y="280" width="18" height="18" fill="#0d4a4a"/>
+  <rect x="267" y="280" width="18" height="18" fill="#0d4a4a"/>
+  <path d="M312 280 L312 360 L372 360 L372 280 L342 240 Z" fill="#d4a055"/>
+  <rect x="327" y="310" width="15" height="25" fill="#0d4a4a"/>
+  <rect x="345" y="295" width="12" height="12" fill="#0d4a4a"/>
+  <rect x="120" y="370" width="272" height="8" fill="#d4a055"/>
+  <path d="M220 150 L250 230 L280 150" stroke="#d4a055" stroke-width="20" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
+
+    function generateIcon(size, filename) {
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = size;
+      canvas.height = size;
+
+      const img = new Image();
+      const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+      const url = URL.createObjectURL(blob);
+
+      img.onload = function() {
+        ctx.drawImage(img, 0, 0, size, size);
+
+        canvas.toBlob(function(blob) {
+          const link = document.createElement('a');
+          link.download = filename;
+          link.href = URL.createObjectURL(blob);
+          link.click();
+
+          showStatus('✅ Generated ' + filename + ' (' + size + 'x' + size + ')');
+          URL.revokeObjectURL(url);
+        }, 'image/png');
+      };
+
+      img.src = url;
+    }
+
+    function showStatus(message) {
+      const status = document.getElementById('status');
+      status.className = 'status';
+      status.textContent = message;
+      setTimeout(() => {
+        status.textContent = '';
+      }, 3000);
+    }
+
+    // Show preview on load
+    window.onload = function() {
+      const preview = document.getElementById('preview-container');
+      const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+      const url = URL.createObjectURL(blob);
+      const img = document.createElement('img');
+      img.src = url;
+      img.width = 128;
+      img.height = 128;
+      preview.appendChild(img);
+    };
+  </script>
+</body>
+</html>

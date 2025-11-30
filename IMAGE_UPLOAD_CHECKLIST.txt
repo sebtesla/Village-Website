@@ -1,0 +1,161 @@
+
+                                                                   ║
+              📸 PRODUCT IMAGE UPLOAD CHECKLIST                    ║
+                                                                   ║
+
+
+STEP 1: PREPARE YOUR PHOTOS
+
+
+For each product, take 3-5 photos:
+
+ Photo 1: Front view (main image)
+ Photo 2: Back view
+ Photo 3: Detail shot (logo, texture, etc.)
+ Photo 4: Side view or lifestyle shot
+ Photo 5: Product being worn/used
+
+Photo Requirements:
+ At least 800x800 pixels
+ Good lighting (natural light is best)
+ Clean background (white or light gray)
+ Product centered and in focus
+ File size under 500KB
+
+
+STEP 2: UPLOAD TO IMGUR
+
+
+ 1. Go to: https://imgur.com/upload
+ 2. Click "New post" or drag images onto page
+ 3. Upload all photos for one product
+ 4. Wait for uploads to complete
+
+For EACH uploaded image:
+ 5. Right-click the image
+ 6. Select "Copy image address"
+ 7. Paste URL into a text file
+
+You should have URLs like:
+  https://i.imgur.com/ABC123.jpg
+  https://i.imgur.com/DEF456.jpg
+  https://i.imgur.com/GHI789.jpg
+
+ URLs must start with: https://i.imgur.com/
+ URLs must end with: .jpg or .png
+ Do NOT use: https://imgur.com/ABC123 (wrong!)
+
+
+STEP 3: ADD PRODUCT IN ADMIN PANEL
+
+
+ 1. Go to: https://therustvillage.netlify.app/admin/products
+ 2. Enter password: admin123
+ 3. Click "Add Product"
+ 4. Fill in product details:
+
+    ┌────────────────────────────────────────────────────┐
+    │ Name: The Village Hat (Green)                      │
+    │ Price: 35.00                                       │
+    │ Description: Our signature snapback hat...         │
+    │                                                    │
+    │ Images (paste your imgur URLs, one per line):     │
+    │ https://i.imgur.com/ABC123.jpg                     │
+    │ https://i.imgur.com/DEF456.jpg                     │
+    │ https://i.imgur.com/GHI789.jpg                     │
+    │                                                    │
+    │ Category: hats                                     │
+    │ Colors: Green, Black, Navy                         │
+    │ Sizes: (leave empty for one-size items)           │
+    │                                                    │
+    │ Features (one per line):                           │
+    │ Embroidered logo                                   │
+    │ Adjustable strap                                   │
+    │ Premium cotton                                     │
+    │                                                    │
+    │ ☑ In Stock                                         │
+    │ ☐ Featured Product                                 │
+    └────────────────────────────────────────────────────┘
+
+ 5. Click "Create Product"
+
+
+STEP 4: VERIFY
+
+
+ Check homepage: Product appears with main image
+ Check shop page: Product visible in correct category
+ Click product: All images show in gallery
+ Test on mobile: Images load and are responsive
+
+
+TROUBLESHOOTING
+
+
+Image not showing?
+  □ Check URL starts with https://i.imgur.com/
+  □ Check URL ends with .jpg or .png
+  □ Open URL in browser - should show just the image
+  □ Try clearing cache (Ctrl+Shift+R)
+
+Can't access admin panel?
+  □ Password is: admin123
+  □ URL is: /admin/products
+
+Product not in shop?
+  □ Make sure "In Stock" is checked
+  □ Wait 1 minute and refresh page
+
+
+EXAMPLE PRODUCT
+
+
+Product: The Village Crewneck Sweatshirt
+
+Photos taken:
+  ✓ crewneck-front.jpg
+  ✓ crewneck-back.jpg
+  ✓ crewneck-detail.jpg
+  ✓ crewneck-worn.jpg
+
+Uploaded to imgur, got URLs:
+  https://i.imgur.com/CREW01.jpg
+  https://i.imgur.com/CREW02.jpg
+  https://i.imgur.com/CREW03.jpg
+  https://i.imgur.com/CREW04.jpg
+
+Added to admin panel:
+  Name: The Village Crewneck Sweatshirt
+  Price: 55
+  Category: apparel
+  Sizes: S, M, L, XL, XXL
+  Colors: Grey, Black, Green
+  Images: (4 URLs pasted)
+  In Stock: ✓
+
+Result:
+  ✓ Shows on homepage
+  ✓ Shows in shop (apparel category)
+  ✓ Product page has image gallery
+  ✓ All 4 images clickable
+
+
+QUICK LINKS
+
+
+Upload Images:  https://imgur.com/upload
+Admin Panel:    https://therustvillage.netlify.app/admin/products
+Shop Page:      https://therustvillage.netlify.app/shop
+Homepage:       https://therustvillage.netlify.app
+
+Full Guide:     See HOW_TO_ADD_PRODUCT_IMAGES.md
+Quick Guide:    See QUICK_IMAGE_UPLOAD_GUIDE.md
+
+
+
+Ready to start? Follow the steps above! 🚀
+
+Total Time: 5-10 minutes per product
+Difficulty: ⭐ Easy
+
+
