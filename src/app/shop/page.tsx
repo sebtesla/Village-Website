@@ -6,7 +6,6 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { ProductCard } from "@/components/product-card"
 import { Button } from "@/components/ui/button"
-import { products as staticProducts } from "@/lib/product-data"
 
 const categories = [
   { id: "all", name: "All Products" },
@@ -14,18 +13,6 @@ const categories = [
   { id: "apparel", name: "Apparel" },
   { id: "accessories", name: "Accessories" },
 ]
-
-// Transform static products to match ProductCard format (image not images[])
-const transformedStaticProducts = staticProducts.map(p => ({
-  id: p.id,
-  name: p.name,
-  price: p.price,
-  image: p.images[0],
-  badge: p.badge,
-  sizes: p.sizes,
-  category: p.category,
-  inStock: p.inStock,
-}))
 
 interface DatabaseProduct {
   id?: string
@@ -39,9 +26,20 @@ interface DatabaseProduct {
   inStock: boolean
 }
 
+interface TransformedProduct {
+  id: string
+  name: string
+  price: number
+  image: string
+  badge: string | null
+  sizes: string[]
+  category: string
+  inStock: boolean
+}
+
 export default function ShopPage() {
   const [selectedCategory, setSelectedCategory] = useState("all")
-  const [products, setProducts] = useState(transformedStaticProducts)
+  const [products, setProducts] = useState<TransformedProduct[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -50,20 +48,18 @@ export default function ShopPage() {
         const response = await fetch('/api/products')
         if (response.ok) {
           const data: DatabaseProduct[] = await response.json()
-          if (data && data.length > 0) {
-            // Transform database products to match ProductCard format
-            const transformed = data.map((p) => ({
-              id: p.id || p.slug,
-              name: p.name,
-              price: p.price,
-              image: Array.isArray(p.images) ? p.images[0] : p.images,
-              badge: p.badge,
-              sizes: p.sizes,
-              category: p.category,
-              inStock: p.inStock,
-            }))
-            setProducts(transformed)
-          }
+          // Transform database products to match ProductCard format
+          const transformed = data.map((p) => ({
+            id: p.slug,
+            name: p.name,
+            price: p.price,
+            image: Array.isArray(p.images) ? p.images[0] : p.images,
+            badge: p.badge,
+            sizes: p.sizes,
+            category: p.category,
+            inStock: p.inStock,
+          }))
+          setProducts(transformed)
         }
       } catch (error) {
         console.error('Failed to fetch products:', error)
@@ -123,23 +119,31 @@ export default function ShopPage() {
 
         {/* Products Grid */}
         <section className="container mx-auto px-4 py-12" suppressHydrationWarning>
-          <div className="mb-6">
-            <p className="text-gray-600">
-              Showing {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}
-              {selectedCategory !== "all" && ` in ${categories.find(c => c.id === selectedCategory)?.name}`}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8" suppressHydrationWarning>
-            {filteredProducts.map((product, index) => (
-              <ProductCard key={`shop-${product.id}-${index}`} {...product} />
-            ))}
-          </div>
-
-          {filteredProducts.length === 0 && (
+          {loading ? (
             <div className="text-center py-16">
-              <p className="text-xl text-gray-600">No products found in this category</p>
+              <p className="text-xl text-gray-600">Loading products...</p>
             </div>
+          ) : (
+            <>
+              <div className="mb-6">
+                <p className="text-gray-600">
+                  Showing {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}
+                  {selectedCategory !== "all" && ` in ${categories.find(c => c.id === selectedCategory)?.name}`}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8" suppressHydrationWarning>
+                {filteredProducts.map((product, index) => (
+                  <ProductCard key={`shop-${product.id}-${index}`} {...product} />
+                ))}
+              </div>
+
+              {filteredProducts.length === 0 && (
+                <div className="text-center py-16">
+                  <p className="text-xl text-gray-600">No products found in this category</p>
+                </div>
+              )}
+            </>
           )}
         </section>
       </main>

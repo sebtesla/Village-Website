@@ -13,16 +13,32 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
-import { products } from "@/lib/product-data"
 import { blogPosts } from "@/lib/blog-data"
 import { Package, FileText, Users, DollarSign, LogOut, Lock } from "lucide-react"
 import { AdminNotifications } from "@/components/admin-notifications"
+
+interface DatabaseProduct {
+  id: string
+  slug: string
+  name: string
+  price: number
+  description: string
+  category: string
+  images: string[]
+  sizes: string[]
+  colors: string[]
+  badge: string | null
+  inStock: boolean
+  featured: boolean
+}
 
 export default function AdminDashboard() {
   const router = useRouter()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+  const [products, setProducts] = useState<DatabaseProduct[]>([])
+  const [loadingProducts, setLoadingProducts] = useState(true)
 
   useEffect(() => {
     // Check if already authenticated in session storage
@@ -31,6 +47,26 @@ export default function AdminDashboard() {
       setIsAuthenticated(true)
     }
   }, [])
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const response = await fetch('/api/products')
+        if (response.ok) {
+          const data = await response.json()
+          setProducts(data)
+        }
+      } catch (error) {
+        console.error('Failed to fetch products:', error)
+      } finally {
+        setLoadingProducts(false)
+      }
+    }
+
+    if (isAuthenticated) {
+      fetchProducts()
+    }
+  }, [isAuthenticated])
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
@@ -257,7 +293,7 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  ${Math.round(products.reduce((sum, p) => sum + p.price, 0) / products.length)}
+                  ${products.length > 0 ? Math.round(products.reduce((sum, p) => sum + p.price, 0) / products.length) : 0}
                 </div>
                 <p className="text-xs text-muted-foreground">Across inventory</p>
               </CardContent>
@@ -283,28 +319,38 @@ export default function AdminDashboard() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {products.map((product) => (
-                      <div key={product.id} className="flex items-center justify-between p-4 border rounded-lg">
-                        <div className="flex items-center gap-4">
-                          <div className="w-16 h-16 bg-gray-100 rounded-lg"></div>
-                          <div>
-                            <h4 className="font-semibold">{product.name}</h4>
-                            <div className="flex gap-2 mt-1">
-                              <Badge variant="outline" className="capitalize">{product.category}</Badge>
-                              {product.badge && (
-                                <Badge className="bg-[#d4a055]">{product.badge}</Badge>
-                              )}
+                  {loadingProducts ? (
+                    <div className="text-center py-8">
+                      <p className="text-gray-600">Loading products...</p>
+                    </div>
+                  ) : products.length === 0 ? (
+                    <div className="text-center py-8">
+                      <p className="text-gray-600">No products found. Add products via the database.</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {products.map((product) => (
+                        <div key={product.id} className="flex items-center justify-between p-4 border rounded-lg">
+                          <div className="flex items-center gap-4">
+                            <div className="w-16 h-16 bg-gray-100 rounded-lg"></div>
+                            <div>
+                              <h4 className="font-semibold">{product.name}</h4>
+                              <div className="flex gap-2 mt-1">
+                                <Badge variant="outline" className="capitalize">{product.category}</Badge>
+                                {product.badge && (
+                                  <Badge className="bg-[#d4a055]">{product.badge}</Badge>
+                                )}
+                              </div>
                             </div>
                           </div>
+                          <div className="text-right">
+                            <p className="font-bold text-lg">${product.price}</p>
+                            <p className="text-sm text-gray-600">{product.inStock ? 'In Stock' : 'Out of Stock'}</p>
+                          </div>
                         </div>
-                        <div className="text-right">
-                          <p className="font-bold text-lg">${product.price}</p>
-                          <p className="text-sm text-gray-600">{product.inStock ? 'In Stock' : 'Out of Stock'}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>

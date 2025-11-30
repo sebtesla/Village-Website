@@ -4,113 +4,44 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { ProductCard } from "@/components/product-card"
 import { Button } from "@/components/ui/button"
+import { prisma } from "@/lib/prisma"
 
-// Sample products data - expanded catalog
-const staticProducts = [
-  {
-    id: "village-hat-green",
-    name: "The Village Hat (Green)",
-    price: 35,
-    image: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=800&h=800&fit=crop&q=80",
-    badge: "BUY 1 GET 1 FREE",
-  },
-  {
-    id: "village-members-jersey",
-    name: "The Village Members Only Jersey",
-    price: 65,
-    image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=800&fit=crop&q=80",
-    sizes: ["S", "M", "L", "XL", "XXL"],
-  },
-  {
-    id: "soapy-tee-black",
-    name: "Soapy Graphic Tee (Black)",
-    price: 32,
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop&q=80",
-    sizes: ["S", "M", "L", "XL", "XXL"],
-  },
-  {
-    id: "village-beanie",
-    name: "The Village Beanie",
-    price: 28,
-    image: "https://images.unsplash.com/photo-1576871337622-98d48d1cf531?w=800&h=800&fit=crop&q=80",
-  },
-  {
-    id: "village-hoodie-black",
-    name: "The Village Logo Hoodie (Black)",
-    price: 60,
-    image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=800&fit=crop&q=80",
-    sizes: ["S", "M", "L", "XL", "XXL"],
-  },
-  {
-    id: "village-tee-white",
-    name: "The Village Classic Tee (White)",
-    price: 30,
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop&auto=format&q=80",
-    sizes: ["S", "M", "L", "XL", "XXL"],
-  },
-  {
-    id: "village-dad-hat",
-    name: "The Village Dad Hat",
-    price: 32,
-    image: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=800&h=800&fit=crop&auto=format&q=80",
-  },
-  {
-    id: "village-crewneck",
-    name: "The Village Crewneck Sweatshirt",
-    price: 55,
-    image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&h=800&fit=crop&q=80",
-    sizes: ["S", "M", "L", "XL", "XXL"],
-  },
-  {
-    id: "village-snapback",
-    name: "The Village Snapback",
-    price: 38,
-    image: "https://images.unsplash.com/photo-1589487391730-58f20eb2c308?w=800&h=800&fit=crop&q=80",
-  },
-  {
-    id: "village-long-sleeve",
-    name: "The Village Long Sleeve Tee",
-    price: 40,
-    image: "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800&h=800&fit=crop&q=80",
-    sizes: ["S", "M", "L", "XL", "XXL"],
-  },
-  {
-    id: "village-tote-bag",
-    name: "The Village Tote Bag",
-    price: 25,
-    image: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=800&h=800&fit=crop&q=80",
-  },
-  {
-    id: "village-zip-hoodie",
-    name: "The Village Zip-Up Hoodie",
-    price: 70,
-    image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&h=800&fit=crop&auto=format&q=80",
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    badge: "NEW ARRIVAL",
-  },
-]
+interface TransformedProduct {
+  id: string
+  name: string
+  price: number
+  image: string
+  badge?: string
+  sizes?: string[]
+}
+
+export const dynamic = 'force-dynamic'
 
 export default async function Home() {
-  // Fetch products from database
-  let products = staticProducts
+  // Fetch products directly from database
+  let products: TransformedProduct[] = []
 
   try {
-    const response = await fetch('https://therustvillage.netlify.app/api/products', {
-      cache: 'no-store'
+    const dbProducts = await prisma.product.findMany({
+      where: {
+        inStock: true,
+      },
+      orderBy: [
+        { featured: 'desc' },
+        { createdAt: 'desc' },
+      ],
     })
-    if (response.ok) {
-      const dbProducts = await response.json()
-      if (dbProducts && dbProducts.length > 0) {
-        // Transform database products to match ProductCard format
-        products = dbProducts.map((p: { slug: string; name: string; price: number; images: string | string[]; badge: string | null; sizes: string[] }) => ({
-          id: p.slug, // Use slug as ID for product page links
-          name: p.name,
-          price: p.price,
-          image: Array.isArray(p.images) ? p.images[0] : p.images,
-          badge: p.badge,
-          sizes: p.sizes,
-        }))
-      }
+
+    if (dbProducts && dbProducts.length > 0) {
+      // Transform database products to match ProductCard format
+      products = dbProducts.map((p) => ({
+        id: p.slug, // Use slug as ID for product page links
+        name: p.name,
+        price: p.price,
+        image: Array.isArray(p.images) ? p.images[0] : (p.images as string),
+        badge: p.badge || undefined,
+        sizes: p.sizes,
+      }))
     }
   } catch (error) {
     console.error('Failed to fetch products:', error)
@@ -194,11 +125,17 @@ export default async function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
-            {products.slice(0, 8).map((product) => (
-              <ProductCard key={product.id} {...product} />
-            ))}
-          </div>
+          {products.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+              {products.slice(0, 8).map((product) => (
+                <ProductCard key={product.id} {...product} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <p className="text-gray-600">Products coming soon!</p>
+            </div>
+          )}
 
           <div className="text-center mt-12">
             <Link href="/shop">

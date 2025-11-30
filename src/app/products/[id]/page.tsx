@@ -9,7 +9,6 @@ import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { getProduct as getStaticProduct, getRelatedProducts, Product } from "@/lib/product-data"
 import { ArrowLeft, ShoppingCart, Heart, Truck, Shield, RefreshCw } from "lucide-react"
 import { ProductCard } from "@/components/product-card"
 import { useCartStore } from "@/store/cart-store"
@@ -29,10 +28,25 @@ interface DatabaseProduct {
   features: string[]
 }
 
+interface Product {
+  id: string
+  name: string
+  description: string
+  price: number
+  category: string
+  images: string[]
+  sizes?: string[]
+  colors?: string[]
+  badge?: string
+  inStock: boolean
+  features?: string[]
+}
+
 export default function ProductDetailPage() {
   const params = useParams()
   const { addItem } = useCartStore()
   const [product, setProduct] = useState<Product | null>(null)
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedImage, setSelectedImage] = useState(0)
   const [selectedSize, setSelectedSize] = useState("")
@@ -44,20 +58,12 @@ export default function ProductDetailPage() {
     async function fetchProduct() {
       const slug = params.id as string
 
-      // First try to get from static data
-      const staticProduct = getStaticProduct(slug)
-      if (staticProduct) {
-        setProduct(staticProduct)
-        setLoading(false)
-        return
-      }
-
-      // If not found in static data, try to fetch from database
       try {
+        // Fetch product from database
         const response = await fetch(`/api/products/${slug}`)
         if (response.ok) {
           const dbProduct: DatabaseProduct = await response.json()
-          // Transform database product to match static product format
+          // Transform database product to match expected format
           const transformedProduct: Product = {
             id: dbProduct.slug,
             name: dbProduct.name,
@@ -72,6 +78,29 @@ export default function ProductDetailPage() {
             features: dbProduct.features,
           }
           setProduct(transformedProduct)
+
+          // Fetch related products from same category
+          const allProductsResponse = await fetch('/api/products')
+          if (allProductsResponse.ok) {
+            const allProducts: DatabaseProduct[] = await allProductsResponse.json()
+            const related = allProducts
+              .filter(p => p.category === dbProduct.category && p.slug !== slug)
+              .slice(0, 4)
+              .map(p => ({
+                id: p.slug,
+                name: p.name,
+                description: p.description,
+                price: p.price,
+                category: p.category,
+                images: p.images,
+                sizes: p.sizes,
+                colors: p.colors,
+                badge: p.badge || undefined,
+                inStock: p.inStock,
+                features: p.features,
+              }))
+            setRelatedProducts(related)
+          }
         }
       } catch (error) {
         console.error('Failed to fetch product:', error)
@@ -110,8 +139,6 @@ export default function ProductDetailPage() {
       </div>
     )
   }
-
-  const relatedProducts = getRelatedProducts(product.id)
 
   const handleAddToCart = () => {
     if (product.sizes && !selectedSize) {
@@ -352,8 +379,16 @@ export default function ProductDetailPage() {
             <section className="mt-20">
               <h2 className="text-2xl md:text-3xl font-bold mb-8">You Might Also Like</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {relatedProducts.map(product => (
-                  <ProductCard key={product.id} {...product} />
+                {relatedProducts.map(relatedProduct => (
+                  <ProductCard
+                    key={relatedProduct.id}
+                    id={relatedProduct.id}
+                    name={relatedProduct.name}
+                    price={relatedProduct.price}
+                    image={relatedProduct.images[0]}
+                    badge={relatedProduct.badge}
+                    sizes={relatedProduct.sizes}
+                  />
                 ))}
               </div>
             </section>
