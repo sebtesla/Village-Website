@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
@@ -9,22 +9,81 @@ import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { getProduct, getRelatedProducts } from "@/lib/product-data"
-import { ArrowLeft, ShoppingCart, Heart, Truck, Shield, RefreshCw } from "lucide-react"
+import { getProduct as getStaticProduct, getRelatedProducts as getStaticRelatedProducts, Product } from "@/lib/product-data"
+import { ArrowLeft, ShoppingCart, Heart, Truck, Shield, RefreshCw, Loader2 } from "lucide-react"
 import { ProductCard } from "@/components/product-card"
 import { useCartStore } from "@/store/cart-store"
 
 export default function ProductDetailPage() {
   const params = useParams()
   const router = useRouter()
-  const product = getProduct(params.id as string)
   const { addItem } = useCartStore()
+  const [product, setProduct] = useState<Product | null>(null)
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
   const [selectedImage, setSelectedImage] = useState(0)
   const [selectedSize, setSelectedSize] = useState("")
   const [selectedColor, setSelectedColor] = useState("")
   const [quantity, setQuantity] = useState(1)
   const [addedToCart, setAddedToCart] = useState(false)
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const productId = params.id as string
+      setLoading(true)
+
+      try {
+        // Try to fetch from the database API first
+        const response = await fetch(`/api/products/${productId}`)
+        if (response.ok) {
+          const data = await response.json()
+          if (data && !data.error) {
+            setProduct(data)
+            // Fetch related products from the API
+            try {
+              const relatedResponse = await fetch('/api/products')
+              if (relatedResponse.ok) {
+                const allProducts = await relatedResponse.json()
+                const related = allProducts
+                  .filter((p: Product) => p.category === data.category && p.id !== data.id)
+                  .slice(0, 4)
+                setRelatedProducts(related)
+              }
+            } catch {
+              // Use static related products as fallback
+              setRelatedProducts(getStaticRelatedProducts(productId))
+            }
+            setLoading(false)
+            return
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch product from API:', error)
+      }
+
+      // Fall back to static product data
+      const staticProduct = getStaticProduct(productId)
+      if (staticProduct) {
+        setProduct(staticProduct)
+        setRelatedProducts(getStaticRelatedProducts(productId))
+      }
+      setLoading(false)
+    }
+
+    fetchProduct()
+  }, [params.id])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 container mx-auto px-4 py-12 flex items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-[#0d4a4a]" />
+        </main>
+        <Footer />
+      </div>
+    )
+  }
 
   if (!product) {
     return (
@@ -42,14 +101,12 @@ export default function ProductDetailPage() {
     )
   }
 
-  const relatedProducts = getRelatedProducts(product.id)
-
   const handleAddToCart = () => {
-    if (product.sizes && !selectedSize) {
+    if (product.sizes && product.sizes.length > 0 && !selectedSize) {
       alert("Please select a size")
       return
     }
-    if (product.colors && !selectedColor) {
+    if (product.colors && product.colors.length > 0 && !selectedColor) {
       alert("Please select a color")
       return
     }

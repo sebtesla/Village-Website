@@ -8,12 +8,15 @@ interface ProductCardProps {
   id: string
   name: string
   price: number
-  image: string
+  image?: string
+  images?: string[]
   badge?: string
   sizes?: string[]
 }
 
-export function ProductCard({ id, name, price, image, badge, sizes }: ProductCardProps) {
+export function ProductCard({ id, name, price, image, images, badge, sizes }: ProductCardProps) {
+  // Support both singular 'image' and plural 'images' array
+  const displayImage = image || (images && images.length > 0 ? images[0] : '')
   return (
     <Card className="group relative overflow-hidden border-0 shadow-none bg-transparent">
       <Link href={`/products/${id}`} className="block">
@@ -26,12 +29,14 @@ export function ProductCard({ id, name, price, image, badge, sizes }: ProductCar
 
         {/* Image Container */}
         <div className="relative aspect-square mb-4 overflow-hidden rounded-lg bg-gray-100">
-          <Image
-            src={image}
-            alt={name}
-            fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
-          />
+          {displayImage && (
+            <Image
+              src={displayImage}
+              alt={name}
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          )}
         </div>
 
         {/* Product Info */}
