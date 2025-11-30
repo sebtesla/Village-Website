@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Header } from "@/components/header"
@@ -95,19 +95,27 @@ const staticProducts = [
 
 export default function Home() {
   const [products, setProducts] = useState(staticProducts)
+  const hasFetched = useRef(false)
 
   useEffect(() => {
+    // Prevent multiple fetches that could cause flickering
+    if (hasFetched.current) return
+    hasFetched.current = true
+
     const fetchProducts = async () => {
       try {
         const response = await fetch('/api/products')
         if (response.ok) {
           const data = await response.json()
-          if (data && data.length > 0) {
+          // Only update if we got actual products from the API
+          // Keep static products as fallback when API returns empty
+          if (data && Array.isArray(data) && data.length > 0) {
             setProducts(data)
           }
         }
       } catch (error) {
         console.error('Failed to fetch products:', error)
+        // Keep static products on error - no state change needed
       }
     }
 

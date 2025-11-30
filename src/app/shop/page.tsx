@@ -1,12 +1,18 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { ProductCard } from "@/components/product-card"
 import { Button } from "@/components/ui/button"
-import { products as staticProducts } from "@/lib/product-data"
+import { products as rawStaticProducts } from "@/lib/product-data"
+
+// Transform static products to include 'image' field for ProductCard compatibility
+const staticProducts = rawStaticProducts.map(product => ({
+  ...product,
+  image: product.images[0] || '',
+}))
 
 const categories = [
   { id: "all", name: "All Products" },
@@ -20,15 +26,20 @@ export default function ShopPage() {
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [products, setProducts] = useState(staticProducts)
   const [loading, setLoading] = useState(true)
+  const hasFetched = useRef(false)
 
   useEffect(() => {
+    // Prevent multiple fetches that could cause flickering
+    if (hasFetched.current) return
+    hasFetched.current = true
+
     const fetchProducts = async () => {
       try {
         const response = await fetch('/api/products')
         if (response.ok) {
           const data = await response.json()
           // Use database products if available, otherwise keep static products
-          if (data && data.length > 0) {
+          if (data && Array.isArray(data) && data.length > 0) {
             setProducts(data)
           }
         }

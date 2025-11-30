@@ -13,7 +13,14 @@ export async function GET() {
       ],
     })
 
-    return NextResponse.json(products)
+    // Map database products to include 'image' field for ProductCard compatibility
+    // The database stores 'images' as an array, but ProductCard expects 'image' as a string
+    const mappedProducts = products.map(product => ({
+      ...product,
+      image: product.images[0] || '',
+    }))
+
+    return NextResponse.json(mappedProducts)
   } catch (error: any) {
     console.error('Failed to fetch products:', error)
 
