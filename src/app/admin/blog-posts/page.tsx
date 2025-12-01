@@ -55,7 +55,9 @@ export default function BlogPostsPage() {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreateDialog, setShowCreateDialog] = useState(false)
+  const [showEditDialog, setShowEditDialog] = useState(false)
   const [creating, setCreating] = useState(false)
+  const [editingPost, setEditingPost] = useState<BlogPost | null>(null)
 
   // Form state
   const [formData, setFormData] = useState({
@@ -113,6 +115,21 @@ export default function BlogPostsPage() {
       .replace(/(^-|-$)/g, '')
   }
 
+  const resetForm = () => {
+    setFormData({
+      title: '',
+      slug: '',
+      excerpt: '',
+      content: '',
+      author: 'The Village Team',
+      category: 'updates',
+      image: '',
+      featured: false,
+      tags: '',
+    })
+    setEditingPost(null)
+  }
+
   const handleCreatePost = async (e: React.FormEvent) => {
     e.preventDefault()
     setCreating(true)
@@ -141,17 +158,7 @@ export default function BlogPostsPage() {
 
       await fetchBlogPosts()
       setShowCreateDialog(false)
-      setFormData({
-        title: '',
-        slug: '',
-        excerpt: '',
-        content: '',
-        author: 'The Village Team',
-        category: 'updates',
-        image: '',
-        featured: false,
-        tags: '',
-      })
+      resetForm()
     } catch (error: unknown) {
       alert((error instanceof Error ? (error instanceof Error ? error.message : "An error occurred") : "An error occurred"))
     } finally {
@@ -172,6 +179,60 @@ export default function BlogPostsPage() {
       await fetchBlogPosts()
     } catch (error: unknown) {
       alert((error instanceof Error ? (error instanceof Error ? error.message : "An error occurred") : "An error occurred"))
+    }
+  }
+
+  const handleEditClick = (post: BlogPost) => {
+    setEditingPost(post)
+    setFormData({
+      title: post.title,
+      slug: post.slug,
+      excerpt: post.excerpt,
+      content: post.content,
+      author: post.author,
+      category: post.category,
+      image: post.image,
+      featured: post.featured,
+      tags: post.tags.join(', '),
+    })
+    setShowEditDialog(true)
+  }
+
+  const handleUpdatePost = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!editingPost) return
+
+    setCreating(true)
+
+    try {
+      const response = await fetch(`/api/admin/blog-posts/${editingPost.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: formData.title,
+          slug: formData.slug,
+          excerpt: formData.excerpt,
+          content: formData.content,
+          author: formData.author,
+          category: formData.category,
+          image: formData.image,
+          featured: formData.featured,
+          tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+        }),
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || 'Failed to update blog post')
+      }
+
+      await fetchBlogPosts()
+      setShowEditDialog(false)
+      resetForm()
+    } catch (error: unknown) {
+      alert((error instanceof Error ? (error instanceof Error ? error.message : "An error occurred") : "An error occurred"))
+    } finally {
+      setCreating(false)
     }
   }
 
@@ -323,6 +384,14 @@ export default function BlogPostsPage() {
                       </div>
 
                       <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleEditClick(post)}
+                        >
+                          <Edit2 className="h-4 w-4 mr-1" />
+                          Edit
+                        </Button>
                         <Button
                           variant="outline"
                           size="sm"
@@ -484,6 +553,141 @@ export default function BlogPostsPage() {
               </Button>
               <Button type="submit" disabled={creating}>
                 {creating ? 'Creating...' : 'Publish Post'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Dialog */}
+      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Edit Blog Post</DialogTitle>
+            <DialogDescription>
+              Update blog post content
+            </DialogDescription>
+          </DialogHeader>
+
+          <form onSubmit={handleUpdatePost} className="space-y-4">
+            <div>
+              <Label htmlFor="edit-title">Title *</Label>
+              <Input
+                id="edit-title"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                placeholder="Your Blog Post Title"
+                required
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="edit-slug">Slug</Label>
+              <Input
+                id="edit-slug"
+                value={formData.slug}
+                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                placeholder="your-post-slug"
+              />
+              <p className="text-xs text-gray-500 mt-1">URL: /blog/{formData.slug || 'your-post-slug'}</p>
+            </div>
+
+            <div>
+              <Label htmlFor="edit-excerpt">Excerpt *</Label>
+              <Textarea
+                id="edit-excerpt"
+                value={formData.excerpt}
+                onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
+                placeholder="A short summary that appears in the blog list..."
+                rows={2}
+                required
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="edit-content">Content * (Markdown supported)</Label>
+              <Textarea
+                id="edit-content"
+                value={formData.content}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                placeholder="# Your Post Title&#10;&#10;Write your content here...&#10;&#10;## Section Heading&#10;&#10;More content..."
+                rows={12}
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="edit-author">Author</Label>
+                <Input
+                  id="edit-author"
+                  value={formData.author}
+                  onChange={(e) => setFormData({ ...formData, author: e.target.value })}
+                  placeholder="The Village Team"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="edit-category">Category</Label>
+                <Select
+                  value={formData.category}
+                  onValueChange={(value) => setFormData({ ...formData, category: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="community">Community</SelectItem>
+                    <SelectItem value="merchandise">Merchandise</SelectItem>
+                    <SelectItem value="events">Events</SelectItem>
+                    <SelectItem value="updates">Updates</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="edit-image">Featured Image URL</Label>
+              <Input
+                id="edit-image"
+                value={formData.image}
+                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                placeholder="https://i.imgur.com/yourimage.jpg"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="edit-tags">Tags (comma separated)</Label>
+              <Input
+                id="edit-tags"
+                value={formData.tags}
+                onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                placeholder="tag1, tag2, tag3"
+              />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="edit-featured"
+                checked={formData.featured}
+                onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
+                className="w-4 h-4"
+              />
+              <Label htmlFor="edit-featured" className="cursor-pointer">
+                Feature this post on homepage
+              </Label>
+            </div>
+
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => {
+                setShowEditDialog(false)
+                resetForm()
+              }}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={creating}>
+                {creating ? 'Updating...' : 'Update Post'}
               </Button>
             </DialogFooter>
           </form>

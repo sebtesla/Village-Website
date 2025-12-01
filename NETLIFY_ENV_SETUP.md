@@ -19,13 +19,13 @@ You need to add these environment variables to your Netlify deployment:
 
 ```
 NEXT_PUBLIC_DISCORD_CLIENT_ID
-1334996493198692454
+<your-discord-client-id>
 
 DISCORD_CLIENT_SECRET
-DzuOKEqqIfGdQQoJlXlbn2Ve5Vz6IPdO
+<your-discord-client-secret>
 
 NEXTAUTH_SECRET
-8f9e7d6c5b4a3210fedcba9876543210abcdef1234567890fedcba9876543210
+<your-nextauth-secret>
 
 NEXTAUTH_URL
 https://therustvillage.netlify.app
@@ -35,7 +35,7 @@ https://therustvillage.netlify.app
 
 ```
 DATABASE_URL
-postgresql://postgres:kzsQgYFhLosLuB3456@db.htqsirayzdfvltzfvwov.supabase.co:5432/postgres
+<your-database-url>
 ```
 
 ### Optional (Can add later)
@@ -73,7 +73,7 @@ admin123
 
 Make sure your Discord app is configured correctly:
 
-1. Go to [Discord Developer Portal](https://discord.com/developers/applications/1334996493198692454)
+1. Go to [Discord Developer Portal](https://discord.com/developers/applications)
 2. Navigate to **OAuth2** → **General**
 3. Under **Redirects**, add:
    ```

@@ -52,8 +52,9 @@ export default function ShopPage() {
           const data: DatabaseProduct[] = await response.json()
           if (data && data.length > 0) {
             // Transform database products to match ProductCard format
+            // Use slug as id for consistent product page linking
             const transformed = data.map((p) => ({
-              id: p.id || p.slug,
+              id: p.slug,
               name: p.name,
               price: p.price,
               image: Array.isArray(p.images) ? p.images[0] : p.images,

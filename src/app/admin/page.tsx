@@ -213,6 +213,25 @@ export default function AdminDashboard() {
                 </CardContent>
               </Card>
             </Link>
+
+            <Link href="/admin/users">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 border-transparent hover:border-[#d4a055]">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="text-xl">Discord Users</CardTitle>
+                      <CardDescription className="mt-2">
+                        View all signed-in users
+                      </CardDescription>
+                    </div>
+                    <Users className="h-8 w-8 text-indigo-600" />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <Button className="w-full">View Users →</Button>
+                </CardContent>
+              </Card>
+            </Link>
           </div>
 
           {/* Stats Cards */}

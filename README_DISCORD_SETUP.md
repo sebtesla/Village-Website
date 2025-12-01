@@ -13,7 +13,7 @@
 
 ### Step 1: Configure Discord Developer Portal (1 minute)
 
-1. Go to: https://discord.com/developers/applications/1334996493198692454
+1. Go to: https://discord.com/developers/applications
 2. Click **OAuth2** → **General** (left sidebar)
 3. Scroll to **Redirects** section
 4. Click **Add Redirect**
@@ -33,15 +33,15 @@
 ```
 Variable 1:
 Key: NEXT_PUBLIC_DISCORD_CLIENT_ID
-Value: 1334996493198692454
+Value: <your-discord-client-id>
 
 Variable 2:
 Key: DISCORD_CLIENT_SECRET
-Value: DzuOKEqqIfGdQQoJlXlbn2Ve5Vz6IPdO
+Value: <your-discord-client-secret>
 
 Variable 3:
 Key: NEXTAUTH_SECRET
-Value: 8f9e7d6c5b4a3210fedcba9876543210abcdef1234567890fedcba9876543210
+Value: <your-nextauth-secret>
 
 Variable 4:
 Key: NEXTAUTH_URL
@@ -75,8 +75,8 @@ After Netlify redeploys:
 
 ## 🔑 Your Credentials
 
-**Discord Application ID:** 1334996493198692454
-**Discord Client Secret:** DzuOKEqqIfGdQQoJlXlbn2Ve5Vz6IPdO
+**Discord Application ID:** Set in Netlify environment variables
+**Discord Client Secret:** Set in Netlify environment variables
 **NextAuth Secret:** Generated and configured
 **Callback URL:** https://therustvillage.netlify.app/api/auth/callback/discord
 
