@@ -4,6 +4,7 @@ export interface Product {
   price: number
   description: string
   images: string[]
+  image?: string
   badge?: string
   category: string
   sizes?: string[]

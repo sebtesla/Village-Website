@@ -8,12 +8,15 @@ interface ProductCardProps {
   id: string
   name: string
   price: number
-  image: string
+  image?: string
+  images?: string[]
   badge?: string
   sizes?: string[]
 }
 
-export function ProductCard({ id, name, price, image, badge, sizes }: ProductCardProps) {
+export function ProductCard({ id, name, price, image, images, badge, sizes }: ProductCardProps) {
+  // Use image if provided, otherwise fall back to first element of images array
+  const displayImage = image || (images && images.length > 0 ? images[0] : "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=800&fit=crop&q=80")
   return (
     <Card className="group relative overflow-hidden border-0 shadow-none bg-transparent">
       <Link href={`/products/${id}`} className="block">
@@ -27,7 +30,7 @@ export function ProductCard({ id, name, price, image, badge, sizes }: ProductCar
         {/* Image Container */}
         <div className="relative aspect-square mb-4 overflow-hidden rounded-lg bg-gray-100">
           <Image
-            src={image || "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=800&fit=crop&q=80"}
+            src={displayImage}
             alt={name}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
