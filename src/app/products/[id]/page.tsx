@@ -1,55 +1,115 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { useParams, useRouter } from "next/navigation"
+import { useParams } from "next/navigation"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { getProduct, getRelatedProducts } from "@/lib/product-data"
+import { getProduct as getStaticProduct, getRelatedProducts as getStaticRelatedProducts, Product } from "@/lib/product-data"
 import { ArrowLeft, ShoppingCart, Heart, Truck, Shield, RefreshCw } from "lucide-react"
 import { ProductCard } from "@/components/product-card"
 import { useCartStore } from "@/store/cart-store"
 
+interface DatabaseProduct {
+  id: string
+  slug: string
+  name: string
+  description: string
+  price: number
+  category: string
+  images: string[]
+  sizes: string[]
+  colors: string[]
+  badge: string | null
+  inStock: boolean
+  featured: boolean
+  features: string[]
+}
+
 export default function ProductDetailPage() {
   const params = useParams()
-  const router = useRouter()
-  const product = getProduct(params.id as string)
+  const productIdOrSlug = params.id as string
   const { addItem } = useCartStore()
+  const [product, setProduct] = useState<Product | null>(null)
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
   const [selectedImage, setSelectedImage] = useState(0)
   const [selectedSize, setSelectedSize] = useState("")
   const [selectedColor, setSelectedColor] = useState("")
   const [quantity, setQuantity] = useState(1)
   const [addedToCart, setAddedToCart] = useState(false)
 
-  if (!product) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <Header />
-        <main className="flex-1 container mx-auto px-4 py-12 text-center">
-          <h1 className="text-3xl font-bold mb-4">Product Not Found</h1>
-          <p className="text-gray-600 mb-6">The product you're looking for doesn't exist.</p>
-          <Link href="/shop">
-            <Button>Back to Shop</Button>
-          </Link>
-        </main>
-        <Footer />
-      </div>
-    )
-  }
+  useEffect(() => {
+    async function fetchProduct() {
+      try {
+        // First try to fetch from database by slug
+        const response = await fetch(`/api/products/${productIdOrSlug}`)
+        if (response.ok) {
+          const dbProduct: DatabaseProduct = await response.json()
+          // Transform to match Product interface
+          setProduct({
+            id: dbProduct.slug, // Use slug as id for consistency
+            name: dbProduct.name,
+            description: dbProduct.description,
+            price: dbProduct.price,
+            category: dbProduct.category,
+            images: dbProduct.images,
+            sizes: dbProduct.sizes,
+            colors: dbProduct.colors,
+            badge: dbProduct.badge || undefined,
+            inStock: dbProduct.inStock,
+            features: dbProduct.features,
+          })
 
-  const relatedProducts = getRelatedProducts(product.id)
+          // Fetch related products from database
+          const relatedResponse = await fetch(`/api/products?category=${dbProduct.category}&exclude=${dbProduct.slug}&limit=4`)
+          if (relatedResponse.ok) {
+            const relatedData: DatabaseProduct[] = await relatedResponse.json()
+            setRelatedProducts(relatedData.map((p: DatabaseProduct) => ({
+              id: p.slug,
+              name: p.name,
+              description: p.description,
+              price: p.price,
+              category: p.category,
+              images: p.images,
+              sizes: p.sizes,
+              colors: p.colors,
+              badge: p.badge || undefined,
+              inStock: p.inStock,
+              features: p.features,
+            })))
+          }
+          setLoading(false)
+          return
+        }
+      } catch (error) {
+        console.error('Failed to fetch from database:', error)
+      }
+
+      // Fall back to static data
+      const staticProduct = getStaticProduct(productIdOrSlug)
+      if (staticProduct) {
+        setProduct(staticProduct)
+        setRelatedProducts(getStaticRelatedProducts(staticProduct.id))
+      }
+      setLoading(false)
+    }
+
+    fetchProduct()
+  }, [productIdOrSlug])
 
   const handleAddToCart = () => {
-    if (product.sizes && !selectedSize) {
+    if (!product) return
+
+    if (product.sizes && product.sizes.length > 0 && !selectedSize) {
       alert("Please select a size")
       return
     }
-    if (product.colors && !selectedColor) {
+    if (product.colors && product.colors.length > 0 && !selectedColor) {
       alert("Please select a color")
       return
     }
@@ -70,6 +130,35 @@ export default function ProductDetailPage() {
     setTimeout(() => {
       setAddedToCart(false)
     }, 2000)
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 container mx-auto px-4 py-12 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading product...</p>
+        </main>
+        <Footer />
+      </div>
+    )
+  }
+
+  if (!product) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 container mx-auto px-4 py-12 text-center">
+          <h1 className="text-3xl font-bold mb-4">Product Not Found</h1>
+          <p className="text-gray-600 mb-6">The product you&apos;re looking for doesn&apos;t exist.</p>
+          <Link href="/shop">
+            <Button>Back to Shop</Button>
+          </Link>
+        </main>
+        <Footer />
+      </div>
+    )
   }
 
   return (
@@ -283,8 +372,16 @@ export default function ProductDetailPage() {
             <section className="mt-20">
               <h2 className="text-2xl md:text-3xl font-bold mb-8">You Might Also Like</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {relatedProducts.map(product => (
-                  <ProductCard key={product.id} {...product} />
+                {relatedProducts.map(relatedProduct => (
+                  <ProductCard
+                    key={relatedProduct.id}
+                    id={relatedProduct.id}
+                    name={relatedProduct.name}
+                    price={relatedProduct.price}
+                    image={relatedProduct.images[0]}
+                    badge={relatedProduct.badge}
+                    sizes={relatedProduct.sizes}
+                  />
                 ))}
               </div>
             </section>
