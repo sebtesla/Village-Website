@@ -1,30 +1,129 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { useParams, useRouter } from "next/navigation"
+import { useParams } from "next/navigation"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { getProduct, getRelatedProducts } from "@/lib/product-data"
-import { ArrowLeft, ShoppingCart, Heart, Truck, Shield, RefreshCw } from "lucide-react"
+import { getProduct as getStaticProduct, getRelatedProducts as getStaticRelatedProducts, Product } from "@/lib/product-data"
+import { ArrowLeft, ShoppingCart, Heart, Truck, Shield, RefreshCw, Loader2 } from "lucide-react"
 import { ProductCard } from "@/components/product-card"
 import { useCartStore } from "@/store/cart-store"
 
+interface DatabaseProduct {
+  id: string
+  slug: string
+  name: string
+  description: string
+  price: number
+  images: string[]
+  badge: string | null
+  category: string
+  sizes: string[]
+  colors: string[]
+  inStock: boolean
+  features: string[]
+}
+
 export default function ProductDetailPage() {
   const params = useParams()
-  const router = useRouter()
-  const product = getProduct(params.id as string)
+  const productId = params.id as string
   const { addItem } = useCartStore()
   const [selectedImage, setSelectedImage] = useState(0)
   const [selectedSize, setSelectedSize] = useState("")
   const [selectedColor, setSelectedColor] = useState("")
   const [quantity, setQuantity] = useState(1)
   const [addedToCart, setAddedToCart] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [product, setProduct] = useState<Product | null>(null)
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([])
+
+  useEffect(() => {
+    async function fetchProduct() {
+      setLoading(true)
+
+      // First, try to get from static data
+      const staticProduct = getStaticProduct(productId)
+      if (staticProduct) {
+        setProduct(staticProduct)
+        setRelatedProducts(getStaticRelatedProducts(staticProduct.id))
+        setLoading(false)
+        return
+      }
+
+      // If not found in static data, try the database API
+      try {
+        const response = await fetch(`/api/products/${productId}`)
+        if (response.ok) {
+          const data: DatabaseProduct = await response.json()
+          // Transform to match Product interface
+          const transformedProduct: Product = {
+            id: data.id,
+            name: data.name,
+            price: data.price,
+            description: data.description,
+            images: data.images,
+            badge: data.badge || undefined,
+            category: data.category,
+            sizes: data.sizes,
+            colors: data.colors,
+            inStock: data.inStock,
+            features: data.features,
+          }
+          setProduct(transformedProduct)
+
+          // Fetch related products from the same category
+          const allProductsResponse = await fetch('/api/products')
+          if (allProductsResponse.ok) {
+            const allProducts: DatabaseProduct[] = await allProductsResponse.json()
+            const related = allProducts
+              .filter(p => p.category === data.category && p.id !== data.id)
+              .slice(0, 4)
+              .map(p => ({
+                id: p.id,
+                name: p.name,
+                price: p.price,
+                description: p.description,
+                images: p.images,
+                image: Array.isArray(p.images) ? p.images[0] : p.images,
+                badge: p.badge || undefined,
+                category: p.category,
+                sizes: p.sizes,
+                colors: p.colors,
+                inStock: p.inStock,
+                features: p.features,
+              }))
+            setRelatedProducts(related)
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch product:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProduct()
+  }, [productId])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 container mx-auto px-4 py-12 flex items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-[#0d4a4a]" />
+            <p className="text-gray-600">Loading product...</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    )
+  }
 
   if (!product) {
     return (
@@ -41,8 +140,6 @@ export default function ProductDetailPage() {
       </div>
     )
   }
-
-  const relatedProducts = getRelatedProducts(product.id)
 
   const handleAddToCart = () => {
     if (product.sizes && !selectedSize) {

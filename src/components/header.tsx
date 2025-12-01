@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Menu, Search, ShoppingCart, X, User, LogOut } from "lucide-react"
@@ -23,6 +23,16 @@ export function Header() {
   const isLoading = status === "loading"
   const { getTotalItems } = useCartStore()
   const cartItemCount = getTotalItems()
+
+  // Log Discord user info when logged in
+  useEffect(() => {
+    if (session?.user) {
+      console.log("Discord User Logged In:")
+      console.log("  Name:", session.user.name)
+      console.log("  Email:", session.user.email)
+      console.log("  Profile Picture:", session.user.image)
+    }
+  }, [session])
 
   return (
     <header className="bg-[#0d4a4a] text-white sticky top-0 z-50">
