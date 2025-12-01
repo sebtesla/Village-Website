@@ -10,13 +10,14 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { getBlogPost, blogPosts, type BlogPost } from "@/lib/blog-data"
-import { Calendar, User, ArrowLeft, Heart, MessageCircle, Share2 } from "lucide-react"
+import { type BlogPost } from "@/lib/blog-data"
+import { Calendar, User, ArrowLeft, Heart, MessageCircle, Share2, Loader2 } from "lucide-react"
 
 export default function BlogPostPage() {
   const params = useParams()
   const slug = params.id as string
   const [post, setPost] = useState<BlogPost | null>(null)
+  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([])
   const [loading, setLoading] = useState(true)
   const [liked, setLiked] = useState(false)
   const [likes, setLikes] = useState(Math.floor(Math.random() * 100) + 20)
@@ -41,21 +42,25 @@ export default function BlogPostPage() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        // Try fetching from database first
         const response = await fetch(`/api/blog-posts/${slug}`)
         if (response.ok) {
           const data = await response.json()
           setPost(data)
-        } else {
-          // Fallback to static data
-          const staticPost = getBlogPost(slug)
-          setPost(staticPost)
+
+          // Fetch related posts (posts with the same category)
+          if (data?.category) {
+            const relatedResponse = await fetch('/api/blog-posts')
+            if (relatedResponse.ok) {
+              const allPosts = await relatedResponse.json()
+              const related = allPosts
+                .filter((p: BlogPost) => p.category === data.category && p.slug !== data.slug)
+                .slice(0, 3)
+              setRelatedPosts(related)
+            }
+          }
         }
       } catch (error) {
         console.error('Failed to fetch blog post:', error)
-        // Fallback to static data
-        const staticPost = getBlogPost(slug)
-        setPost(staticPost)
       } finally {
         setLoading(false)
       }
@@ -68,8 +73,9 @@ export default function BlogPostPage() {
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
-        <main className="flex-1 container mx-auto px-4 py-12 text-center">
-          <p className="text-gray-600">Loading...</p>
+        <main className="flex-1 container mx-auto px-4 py-12 flex flex-col items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-[#0d4a4a] mb-4" />
+          <p className="text-gray-600">Loading blog post...</p>
         </main>
         <Footer />
       </div>
@@ -91,10 +97,6 @@ export default function BlogPostPage() {
       </div>
     )
   }
-
-  const relatedPosts = blogPosts
-    .filter(p => p.category === post.category && (p.id !== post.id && p.slug !== post.slug))
-    .slice(0, 3)
 
   const handleLike = () => {
     if (liked) {

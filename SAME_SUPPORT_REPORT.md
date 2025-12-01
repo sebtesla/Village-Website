@@ -24,7 +24,7 @@ The project has a **fully functional backend** with 12 products and 8 blog posts
 ### 1. Database (PostgreSQL via Supabase)
 **Status:** ✅ Fully Operational
 
-- **Connection String:** `postgresql://postgres:kzsQgYFhLosLuB3456@db.htqsirayzdfvltzfvwov.supabase.co:5432/postgres`
+- **Connection String:** `postgresql://postgres:[PASSWORD]@db.[HOST].supabase.co:5432/postgres`
 - **Products:** 12 items across 3 categories (4 hats, 7 apparel, 1 accessory)
 - **Blog Posts:** 8 published articles with featured content
 - **Schema:** All Prisma migrations applied successfully
@@ -92,12 +92,14 @@ fetch('/api/products').then(r => r.json()).then(console.log)
 
 **Environment Variables Set in Netlify:**
 ```
-NEXT_PUBLIC_DISCORD_CLIENT_ID=1334996493198692454
-DISCORD_CLIENT_SECRET=DzuOKEqqIfGdQQoJlXlbn2Ve5Vz6IPdO
-NEXTAUTH_SECRET=8f9e7d6c5b4a3210fedcba9876543210abcdef1234567890fedcba9876543210
+NEXT_PUBLIC_DISCORD_CLIENT_ID=[YOUR_DISCORD_CLIENT_ID]
+DISCORD_CLIENT_SECRET=[YOUR_DISCORD_CLIENT_SECRET]
+NEXTAUTH_SECRET=[YOUR_NEXTAUTH_SECRET]
 NEXTAUTH_URL=https://therustvillage.netlify.app
-DATABASE_URL=postgresql://postgres:kzsQgYFhLosLuB3456@db.htqsirayzdfvltzfvwov.supabase.co:5432/postgres
+DATABASE_URL=postgresql://postgres:[PASSWORD]@db.[HOST].supabase.co:5432/postgres
 ```
+
+> **Note:** Actual secret values are configured in Netlify environment variables and should never be committed to the repository.
 
 ### 5. Image Hosting
 **Status:** ✅ Configured
