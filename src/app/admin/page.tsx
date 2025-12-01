@@ -15,7 +15,7 @@ import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { products } from "@/lib/product-data"
 import { blogPosts } from "@/lib/blog-data"
-import { Package, FileText, Users, DollarSign, LogOut, Lock } from "lucide-react"
+import { Package, FileText, Users, DollarSign, LogOut, Lock, Settings } from "lucide-react"
 import { AdminNotifications } from "@/components/admin-notifications"
 
 export default function AdminDashboard() {
@@ -229,6 +229,25 @@ export default function AdminDashboard() {
                 </CardHeader>
                 <CardContent>
                   <Button className="w-full">View Users →</Button>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/admin/settings">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 border-transparent hover:border-[#d4a055]">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="text-xl">Site Settings</CardTitle>
+                      <CardDescription className="mt-2">
+                        Configure intro video and site options
+                      </CardDescription>
+                    </div>
+                    <Settings className="h-8 w-8 text-gray-600" />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <Button className="w-full">Manage Settings →</Button>
                 </CardContent>
               </Card>
             </Link>
