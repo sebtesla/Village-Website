@@ -24,7 +24,7 @@ The project has a **fully functional backend** with 12 products and 8 blog posts
 ### 1. Database (PostgreSQL via Supabase)
 **Status:** ✅ Fully Operational
 
-- **Connection String:** `postgresql://postgres:kzsQgYFhLosLuB3456@db.htqsirayzdfvltzfvwov.supabase.co:5432/postgres`
+- **Connection String:** Configured via DATABASE_URL environment variable
 - **Products:** 12 items across 3 categories (4 hats, 7 apparel, 1 accessory)
 - **Blog Posts:** 8 published articles with featured content
 - **Schema:** All Prisma migrations applied successfully
@@ -85,18 +85,18 @@ fetch('/api/products').then(r => r.json()).then(console.log)
 ### 4. Discord OAuth
 **Status:** ✅ Configured
 
-- Client ID: `1334996493198692454`
+- Client ID: Configured in environment variables
 - Client Secret: Configured in environment variables
 - Callback URL: `https://therustvillage.netlify.app/api/auth/callback/discord`
 - NextAuth Secret: Generated and configured
 
 **Environment Variables Set in Netlify:**
 ```
-NEXT_PUBLIC_DISCORD_CLIENT_ID=1334996493198692454
-DISCORD_CLIENT_SECRET=DzuOKEqqIfGdQQoJlXlbn2Ve5Vz6IPdO
-NEXTAUTH_SECRET=8f9e7d6c5b4a3210fedcba9876543210abcdef1234567890fedcba9876543210
+NEXT_PUBLIC_DISCORD_CLIENT_ID=<your-discord-client-id>
+DISCORD_CLIENT_SECRET=<your-discord-client-secret>
+NEXTAUTH_SECRET=<your-nextauth-secret>
 NEXTAUTH_URL=https://therustvillage.netlify.app
-DATABASE_URL=postgresql://postgres:kzsQgYFhLosLuB3456@db.htqsirayzdfvltzfvwov.supabase.co:5432/postgres
+DATABASE_URL=<your-database-url>
 ```
 
 ### 5. Image Hosting

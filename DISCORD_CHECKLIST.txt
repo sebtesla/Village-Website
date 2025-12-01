@@ -18,13 +18,13 @@ Add these 4 variables:
 
 
  1. NEXT_PUBLIC_DISCORD_CLIENT_ID                                  │
-    1334996493198692454                                             │
+    <your-discord-client-id>                                       │
 
  2. DISCORD_CLIENT_SECRET                                           │
-    DzuOKEqqIfGdQQoJlXlbn2Ve5Vz6IPdO                                │
+    <your-discord-client-secret>                                   │
 
  3. NEXTAUTH_SECRET                                                 │
-    8f9e7d6c5b4a3210fedcba9876543210abcdef1234567890fedcba9876543210│
+    <your-nextauth-secret>                                         │
 
  4. NEXTAUTH_URL                                                    │
     https://therustvillage.netlify.app                              │

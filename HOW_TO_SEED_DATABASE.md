@@ -74,7 +74,7 @@ DELETE FROM "Product";
 From your project folder:
 
 ```bash
-DATABASE_URL="postgresql://postgres:kzsQgYFhLosLuB3456@db.htqsirayzdfvltzfvwov.supabase.co:5432/postgres" bun run db:seed
+DATABASE_URL="<your-database-url>" bun run db:seed
 ```
 
 ---

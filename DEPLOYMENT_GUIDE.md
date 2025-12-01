@@ -89,7 +89,7 @@ Click "Environment Variables" and add each of these:
 
 ```env
 # Your Database
-DATABASE_URL=postgresql://postgres:kzsQgYFhLosLuB3456@db.htqsirayzdfvltzfvwov.supabase.co:5432/postgres
+DATABASE_URL=<your-database-url>
 
 # Discord OAuth (set these up - see DISCORD_OAUTH_SETUP.md)
 NEXT_PUBLIC_DISCORD_CLIENT_ID=your_discord_client_id
@@ -137,8 +137,8 @@ cd village-merch-store
 # Install dependencies
 bun install
 
-# Create .env file
-echo 'DATABASE_URL="postgresql://postgres:kzsQgYFhLosLuB3456@db.htqsirayzdfvltzfvwov.supabase.co:5432/postgres"' > .env
+# Create .env file with your database URL
+echo 'DATABASE_URL="<your-database-url>"' > .env
 
 # Run migrations
 bunx prisma migrate deploy

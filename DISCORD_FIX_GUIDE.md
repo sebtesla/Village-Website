@@ -5,9 +5,9 @@
 I've updated your local `.env.local` file with your Discord credentials:
 
 ```env
-NEXT_PUBLIC_DISCORD_CLIENT_ID=1334996493198692454
-DISCORD_CLIENT_SECRET=DzuOKEqqIfGdQQoJlXlbn2Ve5Vz6IPdO
-NEXTAUTH_SECRET=8f9e7d6c5b4a3210fedcba9876543210abcdef1234567890fedcba9876543210
+NEXT_PUBLIC_DISCORD_CLIENT_ID=<your-discord-client-id>
+DISCORD_CLIENT_SECRET=<your-discord-client-secret>
+NEXTAUTH_SECRET=<your-nextauth-secret>
 NEXTAUTH_URL=https://therustvillage.netlify.app
 ```
 
@@ -17,7 +17,7 @@ NEXTAUTH_URL=https://therustvillage.netlify.app
 
 ### Step 1: Update Discord Developer Portal
 
-1. Go to [Discord Developer Portal](https://discord.com/developers/applications/1334996493198692454)
+1. Go to [Discord Developer Portal](https://discord.com/developers/applications)
 2. Click on your application "The Village Merch Store"
 3. Navigate to **OAuth2** → **General** in the left sidebar
 4. Scroll down to **Redirects**
@@ -40,9 +40,9 @@ NEXTAUTH_URL=https://therustvillage.netlify.app
 
 | Key | Value |
 |-----|-------|
-| `NEXT_PUBLIC_DISCORD_CLIENT_ID` | `1334996493198692454` |
-| `DISCORD_CLIENT_SECRET` | `DzuOKEqqIfGdQQoJlXlbn2Ve5Vz6IPdO` |
-| `NEXTAUTH_SECRET` | `8f9e7d6c5b4a3210fedcba9876543210abcdef1234567890fedcba9876543210` |
+| `NEXT_PUBLIC_DISCORD_CLIENT_ID` | Your Discord Client ID |
+| `DISCORD_CLIENT_SECRET` | Your Discord Client Secret |
+| `NEXTAUTH_SECRET` | A securely generated random string |
 | `NEXTAUTH_URL` | `https://therustvillage.netlify.app` |
 
 5. After adding all variables, Netlify will automatically redeploy your site
@@ -98,8 +98,8 @@ Before testing, verify:
 **Problem:** Client ID or Secret is incorrect
 
 **Solution:**
-1. Double-check the Client ID in Netlify: `1334996493198692454`
-2. Double-check the Client Secret in Netlify: `DzuOKEqqIfGdQQoJlXlbn2Ve5Vz6IPdO`
+1. Double-check the Client ID in Netlify matches your Discord application
+2. Double-check the Client Secret in Netlify matches your Discord application
 3. Make sure there are no extra spaces when pasting
 
 ### Error: "Session not persisting" or "Keeps logging out"

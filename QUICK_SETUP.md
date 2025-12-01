@@ -3,7 +3,7 @@
 ## ⚡ 2-Minute Setup
 
 ### 1. Discord Developer Portal
-**URL:** https://discord.com/developers/applications/1334996493198692454
+**URL:** https://discord.com/developers/applications
 
 **Add Redirect:**
 ```
@@ -17,13 +17,13 @@ https://therustvillage.netlify.app/api/auth/callback/discord
 
 ```
 NEXT_PUBLIC_DISCORD_CLIENT_ID
-1334996493198692454
+<your-discord-client-id>
 
 DISCORD_CLIENT_SECRET
-DzuOKEqqIfGdQQoJlXlbn2Ve5Vz6IPdO
+<your-discord-client-secret>
 
 NEXTAUTH_SECRET
-8f9e7d6c5b4a3210fedcba9876543210abcdef1234567890fedcba9876543210
+<your-nextauth-secret>
 
 NEXTAUTH_URL
 https://therustvillage.netlify.app
