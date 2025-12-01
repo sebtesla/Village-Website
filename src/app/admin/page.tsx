@@ -14,8 +14,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { products } from "@/lib/product-data"
-import { blogPosts } from "@/lib/blog-data"
-import { Package, FileText, Users, DollarSign, LogOut, Lock } from "lucide-react"
+import { Package, FileText, Users, DollarSign, LogOut, Lock, Loader2 } from "lucide-react"
 import { AdminNotifications } from "@/components/admin-notifications"
 
 export default function AdminDashboard() {
@@ -23,6 +22,8 @@ export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+  const [dbBlogPosts, setDbBlogPosts] = useState<any[]>([])
+  const [blogPostsLoading, setBlogPostsLoading] = useState(true)
 
   useEffect(() => {
     // Check if already authenticated in session storage
@@ -30,6 +31,23 @@ export default function AdminDashboard() {
     if (auth === 'true') {
       setIsAuthenticated(true)
     }
+  }, [])
+
+  useEffect(() => {
+    async function fetchBlogPosts() {
+      try {
+        const response = await fetch('/api/blog-posts')
+        if (response.ok) {
+          const data = await response.json()
+          setDbBlogPosts(data || [])
+        }
+      } catch (error) {
+        console.error('Failed to fetch blog posts:', error)
+      } finally {
+        setBlogPostsLoading(false)
+      }
+    }
+    fetchBlogPosts()
   }, [])
 
   const handleLogin = (e: React.FormEvent) => {
@@ -234,7 +252,9 @@ export default function AdminDashboard() {
                 <FileText className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{blogPosts.length}</div>
+                <div className="text-2xl font-bold">
+                  {blogPostsLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : dbBlogPosts.length}
+                </div>
                 <p className="text-xs text-muted-foreground">Published articles</p>
               </CardContent>
             </Card>
@@ -319,25 +339,37 @@ export default function AdminDashboard() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {blogPosts.map((post) => (
-                      <div key={post.id} className="p-4 border rounded-lg">
-                        <div className="flex justify-between items-start mb-2">
-                          <h4 className="font-semibold">{post.title}</h4>
-                          {post.featured && (
-                            <Badge className="bg-[#d4a055]">Featured</Badge>
-                          )}
+                  {blogPostsLoading ? (
+                    <div className="flex items-center justify-center py-12">
+                      <Loader2 className="h-8 w-8 animate-spin text-[#0d4a4a]" />
+                      <span className="ml-2 text-gray-600">Loading blog posts...</span>
+                    </div>
+                  ) : dbBlogPosts.length === 0 ? (
+                    <div className="text-center py-12 text-gray-600">
+                      <p>No blog posts found in the database.</p>
+                      <p className="text-sm mt-2">Create your first post using the &quot;Add Post&quot; tab or the dedicated blog management page.</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {dbBlogPosts.map((post) => (
+                        <div key={post.id} className="p-4 border rounded-lg">
+                          <div className="flex justify-between items-start mb-2">
+                            <h4 className="font-semibold">{post.title}</h4>
+                            {post.featured && (
+                              <Badge className="bg-[#d4a055]">Featured</Badge>
+                            )}
+                          </div>
+                          <p className="text-sm text-gray-600 mb-2">{post.excerpt}</p>
+                          <div className="flex gap-2 text-xs text-gray-500">
+                            <Badge variant="outline" className="capitalize">{post.category}</Badge>
+                            <span>{post.author}</span>
+                            <span>•</span>
+                            <span>{post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : 'No date'}</span>
+                          </div>
                         </div>
-                        <p className="text-sm text-gray-600 mb-2">{post.excerpt}</p>
-                        <div className="flex gap-2 text-xs text-gray-500">
-                          <Badge variant="outline" className="capitalize">{post.category}</Badge>
-                          <span>{post.author}</span>
-                          <span>•</span>
-                          <span>{post.date}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>

@@ -3,10 +3,12 @@
 ## ✅ What I've Done
 
 I've configured your Discord OAuth locally with these credentials:
-- **Discord Client ID:** 1334996493198692454
-- **Discord Secret:** DzuOKEqqIfGdQQoJlXlbn2Ve5Vz6IPdO
+- **Discord Client ID:** Configured in environment variables
+- **Discord Secret:** Configured in environment variables
 - **Generated NextAuth Secret:** Ready
 - **Updated .env.local:** ✅ Complete
+
+> **Note:** All secret values should be configured in Netlify environment variables, not committed to the repository.
 
 ---
 
@@ -30,11 +32,13 @@ Go to: https://app.netlify.com/
 3. Add these 4 variables (click "Add a variable" for each):
 
 ```
-NEXT_PUBLIC_DISCORD_CLIENT_ID = 1334996493198692454
-DISCORD_CLIENT_SECRET = DzuOKEqqIfGdQQoJlXlbn2Ve5Vz6IPdO
-NEXTAUTH_SECRET = 8f9e7d6c5b4a3210fedcba9876543210abcdef1234567890fedcba9876543210
+NEXT_PUBLIC_DISCORD_CLIENT_ID = [YOUR_DISCORD_CLIENT_ID]
+DISCORD_CLIENT_SECRET = [YOUR_DISCORD_CLIENT_SECRET]
+NEXTAUTH_SECRET = [YOUR_NEXTAUTH_SECRET]
 NEXTAUTH_URL = https://therustvillage.netlify.app
 ```
+
+> **Important:** Get the actual secret values from your Discord Developer Portal and generate a secure NextAuth secret.
 
 ### 3️⃣ Test It (2 minutes)
 
@@ -64,17 +68,19 @@ https://therustvillage.netlify.app/api/auth/callback/discord
 **Netlify Variables:**
 ```
 NEXT_PUBLIC_DISCORD_CLIENT_ID
-1334996493198692454
+[YOUR_DISCORD_CLIENT_ID]
 
 DISCORD_CLIENT_SECRET
-DzuOKEqqIfGdQQoJlXlbn2Ve5Vz6IPdO
+[YOUR_DISCORD_CLIENT_SECRET]
 
 NEXTAUTH_SECRET
-8f9e7d6c5b4a3210fedcba9876543210abcdef1234567890fedcba9876543210
+[YOUR_NEXTAUTH_SECRET]
 
 NEXTAUTH_URL
 https://therustvillage.netlify.app
 ```
+
+> **Important:** Replace the placeholders above with actual values from your Discord Developer Portal and a securely generated NextAuth secret.
 
 ---
 
