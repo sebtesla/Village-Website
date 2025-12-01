@@ -201,3 +201,27 @@ enum DiscountType {
   PERCENTAGE
   FIXED_AMOUNT
 }
+
+// Site Settings model for configurable site-wide settings
+model SiteSettings {
+  id            String    @id @default("default")
+
+  // Intro Video settings
+  introVideoEnabled     Boolean   @default(true)
+  introVideoUrl         String?
+  introVideoSkipSeconds Int       @default(5)
+
+  // Site Config settings
+  siteName              String    @default("The Village")
+  siteDescription       String?   @db.Text
+  maintenanceMode       Boolean   @default(false)
+  maintenanceMessage    String?   @db.Text
+  contactEmail          String?
+  socialDiscord         String?
+  socialTwitter         String?
+  socialInstagram       String?
+
+  // Timestamps
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}

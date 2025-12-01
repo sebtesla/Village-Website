@@ -5,6 +5,7 @@ import ClientBody from "./ClientBody";
 import Script from "next/script";
 import { SessionProvider } from "@/components/providers/session-provider";
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
+import { IntroVideo } from "@/components/intro-video";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -64,6 +65,7 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning className="antialiased">
         <SessionProvider>
+          <IntroVideo />
           <ClientBody>{children}</ClientBody>
           <PWAInstallPrompt />
         </SessionProvider>
