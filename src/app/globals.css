@@ -67,3 +67,90 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ===================================================================
+   RECRUITMENT FUNNEL THEME — dark military-industrial
+   Scoped to .recruit-theme so the storefront's light theme is untouched.
+=================================================================== */
+.recruit-theme {
+  --rc-void: #0a1412;        /* base background, teal-black */
+  --rc-panel: #0f1f1c;       /* card/panel surface */
+  --rc-panel-raised: #142c28;/* slightly lifted surface */
+  --rc-teal: #0d4a4a;        /* brand teal, deepened for dark mode use */
+  --rc-teal-line: #1c4a44;   /* hairline/border teal */
+  --rc-gold: #d4a055;        /* brand gold */
+  --rc-gold-dim: #8a6a3a;
+  --rc-rust: #c1502e;        /* new accent, alarms/live/CTA pulses */
+  --rc-rust-dim: #7a3420;
+  --rc-bone: #e9e4d6;        /* primary text on dark */
+  --rc-mist: #7c9490;        /* muted secondary text */
+  --rc-green-live: #6fae62;  /* online/live indicator */
+
+  background: var(--rc-void);
+  color: var(--rc-bone);
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.recruit-theme .font-display {
+  font-family: var(--font-barlow-condensed), sans-serif;
+}
+
+.recruit-theme .font-tactical {
+  font-family: var(--font-jetbrains-mono), monospace;
+}
+
+.recruit-theme .hud-corners {
+  position: relative;
+}
+.recruit-theme .hud-corners::before,
+.recruit-theme .hud-corners::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: var(--rc-gold);
+  opacity: 0.7;
+}
+.recruit-theme .hud-corners::before {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid var(--rc-gold);
+  border-left: 2px solid var(--rc-gold);
+}
+.recruit-theme .hud-corners::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid var(--rc-gold);
+  border-right: 2px solid var(--rc-gold);
+}
+
+.recruit-theme .scan-bg {
+  background-image:
+    repeating-linear-gradient(0deg, rgba(212, 160, 85, 0.035) 0px, rgba(212, 160, 85, 0.035) 1px, transparent 1px, transparent 3px),
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(13, 74, 74, 0.35), transparent 70%);
+}
+
+@keyframes rc-pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(111, 174, 98, 0.55); }
+  50% { opacity: 0.6; box-shadow: 0 0 0 5px rgba(111, 174, 98, 0); }
+}
+.recruit-theme .pulse-live {
+  animation: rc-pulse-dot 1.8s ease-in-out infinite;
+}
+
+@keyframes rc-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.recruit-theme .shimmer-legendary {
+  background-image: linear-gradient(110deg, transparent 30%, rgba(212, 160, 85, 0.35) 50%, transparent 70%);
+  background-size: 200% 100%;
+  animation: rc-shimmer 2.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .recruit-theme .pulse-live,
+  .recruit-theme .shimmer-legendary {
+    animation: none;
+  }
+}

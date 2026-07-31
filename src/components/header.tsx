@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dialog"
 import { useSession, signIn, signOut } from "next-auth/react"
 import { useCartStore } from "@/store/cart-store"
+import { DiscordCtaButton } from "@/components/recruit/discord-cta-button"
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
@@ -55,6 +56,7 @@ export function Header() {
                 <Link href="/about" className="text-lg hover:text-[#d4a055] transition-colors">
                   ABOUT
                 </Link>
+                <DiscordCtaButton className="mt-2 justify-center" />
               </nav>
             </SheetContent>
           </Sheet>
@@ -88,6 +90,8 @@ export function Header() {
 
           {/* Actions */}
           <div className="flex items-center gap-2">
+            <DiscordCtaButton size="sm" label="JOIN DISCORD" className="hidden sm:inline-flex" />
+
             <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
               <Search className="h-5 w-5" />
             </Button>
