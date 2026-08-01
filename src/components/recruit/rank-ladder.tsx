@@ -9,7 +9,7 @@ import { SectionHeading } from "./section-heading"
 const RANKS = [
   {
     tier: "10",
-    name: "Commander",
+    name: "President",
     symbol: "⚑",
     detail: "Held by the elected President and Vice President, granting them undisputed authority in the Village whenever needed.",
     reserved: true,
@@ -79,7 +79,7 @@ export function RankLadder() {
         <SectionHeading
           eyebrow="Progression"
           title="Rank ladder"
-          description="Ranks 01–09 are handed out automatically by the voice-activity bot based on time logged in channel — no cheating the system. Commander is the one reserved role, held by elected leadership rather than earned by activity alone."
+          description="Ranks 01–09 are handed out automatically by the voice-activity bot based on time logged in channel — no cheating the system. President is the one reserved role, held by elected leadership rather than earned by activity alone."
         />
 
         <div className="max-w-3xl mx-auto space-y-px bg-[color:var(--rc-teal-line)]">
@@ -92,7 +92,7 @@ export function RankLadder() {
                   className="w-full flex items-center gap-3 sm:gap-4 px-5 sm:px-7 py-5 text-left"
                   aria-expanded={isOpen}
                 >
-                  <div className="w-28 sm:w-52 shrink-0 flex items-center gap-2 sm:gap-4">
+                  <div className="w-28 sm:w-80 shrink-0 flex items-center gap-2 sm:gap-4">
                     <span className="font-tactical text-sm text-[color:var(--rc-gold-dim)] shrink-0">
                       {rank.tier}
                     </span>
@@ -100,7 +100,7 @@ export function RankLadder() {
                       {rank.name}
                     </span>
                     {rank.reserved && (
-                      <span className="font-tactical text-[10px] tracking-[0.2em] uppercase text-[color:var(--rc-rust)] border border-[color:var(--rc-rust-dim)] px-2 py-0.5 hidden lg:inline shrink-0">
+                      <span className="font-tactical text-[10px] tracking-[0.2em] uppercase text-[color:var(--rc-rust)] border border-[color:var(--rc-rust-dim)] px-2 py-0.5 hidden sm:inline shrink-0">
                         Reserved
                       </span>
                     )}

@@ -154,3 +154,26 @@
     animation: none;
   }
 }
+
+/* Footer is shared with the light-themed shop pages, so only recolor it
+   when it's rendered inside the dark recruit-theme homepage. */
+.recruit-theme footer {
+  background-color: var(--rc-void) !important;
+  border-top-color: var(--rc-teal-line) !important;
+  color: var(--rc-bone);
+}
+.recruit-theme footer .text-gray-600,
+.recruit-theme footer .text-gray-500 {
+  color: var(--rc-mist) !important;
+}
+.recruit-theme footer a.bg-white {
+  background-color: var(--rc-panel) !important;
+  border-color: var(--rc-teal-line) !important;
+  color: var(--rc-bone);
+}
+.recruit-theme footer .bg-border {
+  background-color: var(--rc-teal-line) !important;
+}
+.recruit-theme footer .text-\[\#0d4a4a\] {
+  color: var(--rc-gold) !important;
+}

@@ -16,9 +16,9 @@ export function RecruitHero() {
           Join The Village
         </h1>
         <p className="text-[color:var(--rc-mist)] text-base sm:text-xl max-w-2xl mb-10">
-          A whole different way to play Rust. Real people who vote, and base
-          near each other on wipe day. No auditions. No drama. Just a crew
-          that shows up and helps each other out.
+          Rust, but actually fun. Imagine a group where everyone votes, builds
+          close by on wipe day, and drops the toxic nonsense. No auditions
+          needed—just show up, play, and back each other up.
         </p>
 
         <div className="mb-10">

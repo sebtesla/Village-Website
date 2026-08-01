@@ -4,13 +4,18 @@ import { useEffect, useState } from "react"
 import { SectionHeading } from "./section-heading"
 
 const ROSTER = [
-  { name: "Seb", role: "Base defense" },
-  { name: "Piper", role: "Farming crew" },
-  { name: "n0r4n", role: "Raid lead" },
-  { name: "Ty", role: "Scout" },
-  { name: "qhans", role: "Builder" },
-  { name: "Silvex", role: "Base defense" },
-  { name: "bink", role: "Farming crew" },
+  "Piper",
+  "Jared The Mormon",
+  "Cal",
+  "polipoker",
+  "Mr. Chunky Monkey",
+  "Zoinks",
+  "frenzal_",
+  "Human Resources",
+  "rat large",
+  "BigBeardBUBU",
+  "madmiller2",
+  "Not Eek",
 ]
 
 export function VoiceRoster() {
@@ -42,11 +47,11 @@ export function VoiceRoster() {
             </span>
           </div>
           <ul className="divide-y divide-[color:var(--rc-teal-line)]">
-            {ROSTER.map((member, i) => {
+            {ROSTER.map((name, i) => {
               const isSpeaking = i === speakingIndex
               return (
                 <li
-                  key={member.name}
+                  key={name}
                   className={`flex items-center justify-between px-5 py-3.5 transition-colors ${
                     isSpeaking ? "bg-[color:var(--rc-panel-raised)]" : ""
                   }`}
@@ -57,11 +62,9 @@ export function VoiceRoster() {
                         isSpeaking ? "bg-[color:var(--rc-gold)] pulse-live" : "bg-[color:var(--rc-green-live)]"
                       }`}
                     />
-                    <span className="font-medium text-[color:var(--rc-bone)]">{member.name}</span>
+                    <span className="font-medium text-[color:var(--rc-bone)]">{name}</span>
                   </div>
-                  <span className="font-tactical text-xs text-[color:var(--rc-mist)] uppercase tracking-wide">
-                    {member.role}
-                  </span>
+                  <span className="font-tactical text-sm text-[color:var(--rc-gold)]">★</span>
                 </li>
               )
             })}

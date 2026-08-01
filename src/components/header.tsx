@@ -1,8 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { usePathname } from "next/navigation"
 import { Menu, Search, ShoppingCart, X, User, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -24,13 +25,44 @@ export function Header() {
   const isLoading = status === "loading"
   const { getTotalItems } = useCartStore()
   const cartItemCount = getTotalItems()
+  const pathname = usePathname()
+  const showPromoBanner = pathname?.startsWith("/shop")
+
+  // On the homepage only, the header stays hidden until the visitor scrolls
+  // to the bottom of the page. Every other page keeps the normal sticky header.
+  const isHome = pathname === "/"
+  const [revealed, setRevealed] = useState(!isHome)
+
+  useEffect(() => {
+    if (!isHome) return
+
+    const checkScrollPosition = () => {
+      const scrolledToBottom =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 40
+      setRevealed(scrolledToBottom)
+    }
+
+    checkScrollPosition()
+    window.addEventListener("scroll", checkScrollPosition, { passive: true })
+    window.addEventListener("resize", checkScrollPosition)
+    return () => {
+      window.removeEventListener("scroll", checkScrollPosition)
+      window.removeEventListener("resize", checkScrollPosition)
+    }
+  }, [isHome])
+
+  const headerPositionClasses = isHome
+    ? `fixed top-0 left-0 right-0 transition-transform duration-300 ${revealed ? "translate-y-0" : "-translate-y-full"}`
+    : "sticky top-0"
 
   return (
-    <header className="bg-[#0d4a4a] text-white sticky top-0 z-50">
-      {/* Promo Banner */}
-      <div className="bg-gradient-to-r from-[#d4a055] to-[#c99445] text-[#0d4a4a] text-center py-2 px-4 text-sm font-bold">
-        FREE SHIPPING ON ORDERS OVER $75
-      </div>
+    <header className={`bg-[#0d4a4a] text-white z-50 ${headerPositionClasses}`}>
+      {/* Promo Banner — shop pages only */}
+      {showPromoBanner && (
+        <div className="bg-gradient-to-r from-[#d4a055] to-[#c99445] text-[#0d4a4a] text-center py-2 px-4 text-sm font-bold">
+          FREE SHIPPING ON ORDERS OVER $75
+        </div>
+      )}
 
       {/* Main Header */}
       <div className="container mx-auto px-4">

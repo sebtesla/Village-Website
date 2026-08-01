@@ -15,7 +15,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col recruit-theme">
       <Header />
 
-      <main className="flex-1">
+      <main className="flex-1 max-w-6xl mx-auto w-full border-x border-[color:var(--rc-teal-line)]">
         <RecruitHero />
         <VoiceRoster />
         <RankLadder />
