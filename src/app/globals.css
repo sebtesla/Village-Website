@@ -86,7 +86,7 @@
   --rc-bone: #e9e4d6;        /* primary text on dark */
   --rc-mist: #7c9490;        /* muted secondary text */
   --rc-green-live: #6fae62;  /* online/live indicator */
-  --rc-gold-pale: #f2e2c0;   /* light gold card surface, replaces white on dark pages */
+  --rc-card-light: #e5e5e0; /* light gray card surface, replaces white on dark pages */
 }
 
 .recruit-theme {
@@ -189,16 +189,16 @@
   color: var(--rc-gold) !important;
 }
 
-/* Product/blog cards go pale gold instead of white on dark pages. Overriding
+/* Product/blog cards go light gray instead of white on dark pages. Overriding
    the shared --card variable means every plain <Card> (product cards, blog
    cards, related posts, order/account cards) picks this up automatically. */
 .dark-page-bg,
 .recruit-theme {
-  --card: 41 66% 85%;
+  --card: 60 9% 89%;
 }
 .dark-page-bg .bg-white,
 .recruit-theme .bg-white {
-  background-color: var(--rc-gold-pale) !important;
+  background-color: var(--rc-card-light) !important;
 }
 
 /* Sticky category filter bars (Shop, Blog) — dark panel instead of white. */
