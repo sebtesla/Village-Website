@@ -70,9 +70,10 @@
 
 /* ===================================================================
    RECRUITMENT FUNNEL THEME — dark military-industrial
-   Scoped to .recruit-theme so the storefront's light theme is untouched.
+   Variables live at :root so they're available site-wide (Shop, Blog, etc.
+   use them via .dark-page-bg too, not just the homepage's .recruit-theme).
 =================================================================== */
-.recruit-theme {
+:root {
   --rc-void: #0a1412;        /* base background, teal-black */
   --rc-panel: #0f1f1c;       /* card/panel surface */
   --rc-panel-raised: #142c28;/* slightly lifted surface */
@@ -85,7 +86,9 @@
   --rc-bone: #e9e4d6;        /* primary text on dark */
   --rc-mist: #7c9490;        /* muted secondary text */
   --rc-green-live: #6fae62;  /* online/live indicator */
+}
 
+.recruit-theme {
   background: var(--rc-void);
   color: var(--rc-bone);
   font-family: var(--font-geist-sans), sans-serif;
