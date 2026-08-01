@@ -112,14 +112,14 @@ export default function TrackOrderPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col dark-page-bg">
       <Header />
 
-      <main className="flex-1 bg-gray-50 py-12">
+      <main className="flex-1 dark-page-bg py-12">
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-bold mb-4">Track Your Order</h1>
-            <p className="text-gray-600">
+            <p className="text-[color:var(--rc-mist)]">
               Enter your order number and email to track your package
             </p>
           </div>

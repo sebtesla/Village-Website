@@ -51,7 +51,7 @@ export default function BlogPage() {
   const regularPosts = filteredPosts.filter(post => !post.featured)
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col dark-page-bg">
       <Header />
 
       <main className="flex-1">
@@ -148,7 +148,7 @@ export default function BlogPage() {
             )}
             {selectedCategory !== "all" && (
               <div className="mb-6">
-                <p className="text-gray-600">
+                <p className="text-[color:var(--rc-mist)]">
                   Showing {filteredPosts.length} {filteredPosts.length === 1 ? 'post' : 'posts'}
                   {selectedCategory !== "all" && ` in ${categories.find(c => c.id === selectedCategory)?.name}`}
                 </p>
@@ -196,7 +196,7 @@ export default function BlogPage() {
 
             {filteredPosts.length === 0 && (
               <div className="text-center py-16">
-                <p className="text-xl text-gray-600">No posts found in this category</p>
+                <p className="text-xl text-[color:var(--rc-mist)]">No posts found in this category</p>
               </div>
             )}
           </section>

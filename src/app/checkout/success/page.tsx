@@ -26,7 +26,7 @@ function SuccessContent() {
           <div className="text-center mb-8">
             <CheckCircle2 className="h-20 w-20 text-green-600 mx-auto mb-4" />
             <h1 className="text-3xl md:text-4xl font-bold mb-4">Order Confirmed!</h1>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-[color:var(--rc-mist)]">
               Thank you for your purchase. Your order has been received and is being processed.
             </p>
           </div>
@@ -91,7 +91,7 @@ function SuccessContent() {
 
 export default function CheckoutSuccessPage() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col dark-page-bg">
       <Header />
       <Suspense fallback={
         <main className="flex-1 container mx-auto px-4 py-12">

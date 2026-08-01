@@ -3,7 +3,7 @@ import { Footer } from "@/components/footer"
 
 export default function MapPage() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col dark-page-bg">
       <Header />
 
       <main className="flex-1 bg-gradient-to-r from-[#0d4a4a] to-[#0a3d3d]">

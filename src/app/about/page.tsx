@@ -8,7 +8,7 @@ import { Heart, Users, Sparkles, Shield } from "lucide-react"
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col dark-page-bg">
       <Header />
 
       <main className="flex-1">
@@ -35,19 +35,19 @@ export default function AboutPage() {
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">Our Story</h2>
             <div className="prose prose-lg max-w-none">
-              <p className="text-gray-700 leading-relaxed mb-6">
+              <p className="text-[color:var(--rc-mist)] leading-relaxed mb-6">
                 The Village started with a simple idea: create a space where people can come together,
                 express themselves, and feel like they belong. What began as a small group of friends
                 sharing a passion for quality merchandise has grown into a thriving community of
                 thousands of members worldwide.
               </p>
-              <p className="text-gray-700 leading-relaxed mb-6">
+              <p className="text-[color:var(--rc-mist)] leading-relaxed mb-6">
                 We believe that what you wear should represent who you are. That's why every piece
                 in our collection is thoughtfully designed, carefully crafted, and built to last.
                 From our signature hats to our premium hoodies, each item tells a story and connects
                 you to something bigger than yourself.
               </p>
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-[color:var(--rc-mist)] leading-relaxed">
                 Today, The Village is more than a brand—it's a movement. A community of like-minded
                 individuals who value authenticity, quality, and meaningful connections. Whether you're
                 here for the merch, the community, or both, welcome home.
@@ -57,7 +57,7 @@ export default function AboutPage() {
         </section>
 
         {/* Our Values */}
-        <section className="bg-gray-50 py-16 md:py-24">
+        <section className="dark-page-bg py-16 md:py-24">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">Our Values</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -120,21 +120,21 @@ export default function AboutPage() {
               <div className="text-center">
                 <div className="text-4xl md:text-5xl font-bold text-[#d4a055] mb-3">100%</div>
                 <h3 className="text-lg font-semibold mb-2">Premium Quality</h3>
-                <p className="text-gray-600">
+                <p className="text-[color:var(--rc-mist)]">
                   Every product meets our strict quality standards
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-4xl md:text-5xl font-bold text-[#d4a055] mb-3">24/7</div>
                 <h3 className="text-lg font-semibold mb-2">Community Support</h3>
-                <p className="text-gray-600">
+                <p className="text-[color:var(--rc-mist)]">
                   Our Discord community is always here to help
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-4xl md:text-5xl font-bold text-[#d4a055] mb-3">FREE</div>
                 <h3 className="text-lg font-semibold mb-2">Shipping Over $75</h3>
-                <p className="text-gray-600">
+                <p className="text-[color:var(--rc-mist)]">
                   Fast, reliable shipping on qualifying orders
                 </p>
               </div>
@@ -143,7 +143,7 @@ export default function AboutPage() {
         </section>
 
         {/* Manufacturing */}
-        <section className="bg-gray-50 py-16 md:py-24">
+        <section className="dark-page-bg py-16 md:py-24">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">How We Make Our Merch</h2>
@@ -161,21 +161,21 @@ export default function AboutPage() {
                 <div className="space-y-6">
                   <div>
                     <h3 className="text-xl font-bold mb-2">Ethical Manufacturing</h3>
-                    <p className="text-gray-700">
+                    <p className="text-[color:var(--rc-mist)]">
                       We partner with certified manufacturers who share our values. Every worker is treated
                       fairly, and we maintain the highest quality standards throughout production.
                     </p>
                   </div>
                   <div>
                     <h3 className="text-xl font-bold mb-2">Premium Materials</h3>
-                    <p className="text-gray-700">
+                    <p className="text-[color:var(--rc-mist)]">
                       From heavyweight cotton blends to premium mesh fabrics, we source only the best
                       materials. Everything is rigorously tested for durability and comfort.
                     </p>
                   </div>
                   <div>
                     <h3 className="text-xl font-bold mb-2">Sustainable Practices</h3>
-                    <p className="text-gray-700">
+                    <p className="text-[color:var(--rc-mist)]">
                       We're committed to reducing our environmental impact through eco-friendly packaging,
                       carbon-neutral shipping options, and minimal waste production methods.
                     </p>

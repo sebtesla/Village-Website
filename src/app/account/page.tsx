@@ -97,12 +97,12 @@ export default function AccountPage() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col dark-page-bg">
         <Header />
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0d4a4a] mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading your account...</p>
+            <p className="text-[color:var(--rc-mist)]">Loading your account...</p>
           </div>
         </main>
         <Footer />
@@ -115,10 +115,10 @@ export default function AccountPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col dark-page-bg">
       <Header />
 
-      <main className="flex-1 bg-gray-50">
+      <main className="flex-1 dark-page-bg">
         <div className="container mx-auto px-4 py-8">
           {/* Profile Header */}
           <div className="bg-gradient-to-r from-[#0d4a4a] to-[#0a3d3d] text-white rounded-lg p-8 mb-8">

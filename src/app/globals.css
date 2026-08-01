@@ -177,3 +177,14 @@
 .recruit-theme footer .text-\[\#0d4a4a\] {
   color: var(--rc-gold) !important;
 }
+
+/* Lightweight dark background for pages (Shop, Blog, and others) that keep
+   their existing light cards — the backdrop and any un-classed default text
+   go dark/light, but Card components keep their own explicit white bg +
+   dark text since Card always sets text-card-foreground on itself. Explicit
+   text-gray-* classes are left alone here and fixed per-instance in JSX,
+   since many of them sit inside still-white cards where they must stay dark. */
+.dark-page-bg {
+  background-color: var(--rc-void);
+  color: var(--rc-bone);
+}

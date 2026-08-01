@@ -134,11 +134,11 @@ export default function ProductDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col dark-page-bg">
         <Header />
         <main className="flex-1 container mx-auto px-4 py-12 text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading product...</p>
+          <p className="text-[color:var(--rc-mist)]">Loading product...</p>
         </main>
         <Footer />
       </div>
@@ -147,11 +147,11 @@ export default function ProductDetailPage() {
 
   if (!product) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col dark-page-bg">
         <Header />
         <main className="flex-1 container mx-auto px-4 py-12 text-center">
           <h1 className="text-3xl font-bold mb-4">Product Not Found</h1>
-          <p className="text-gray-600 mb-6">The product you&apos;re looking for doesn&apos;t exist.</p>
+          <p className="text-[color:var(--rc-mist)] mb-6">The product you&apos;re looking for doesn&apos;t exist.</p>
           <Link href="/shop">
             <Button>Back to Shop</Button>
           </Link>
@@ -162,7 +162,7 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col dark-page-bg">
       <Header />
 
       <main className="flex-1">
@@ -229,7 +229,7 @@ export default function ProductDetailPage() {
                 </Badge>
                 <h1 className="text-3xl md:text-4xl font-bold mb-4">{product.name}</h1>
                 <p className="text-3xl font-bold text-[#d4a055] mb-4">${product.price}</p>
-                <p className="text-gray-600 leading-relaxed">{product.description}</p>
+                <p className="text-[color:var(--rc-mist)] leading-relaxed">{product.description}</p>
               </div>
 
               <Separator />
@@ -330,7 +330,7 @@ export default function ProductDetailPage() {
                     <h3 className="font-semibold mb-4">Product Features</h3>
                     <ul className="space-y-2">
                       {product.features.map((feature, index) => (
-                        <li key={index} className="flex items-start gap-2 text-gray-600">
+                        <li key={index} className="flex items-start gap-2 text-[color:var(--rc-mist)]">
                           <span className="text-[#d4a055] mt-1">•</span>
                           {feature}
                         </li>
@@ -346,21 +346,21 @@ export default function ProductDetailPage() {
                   <Truck className="h-5 w-5 text-[#0d4a4a] mt-1" />
                   <div>
                     <p className="font-semibold text-sm">Free Shipping</p>
-                    <p className="text-xs text-gray-600">On orders over $75</p>
+                    <p className="text-xs text-[color:var(--rc-mist)]">On orders over $75</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <RefreshCw className="h-5 w-5 text-[#0d4a4a] mt-1" />
                   <div>
                     <p className="font-semibold text-sm">Easy Returns</p>
-                    <p className="text-xs text-gray-600">30-day return policy</p>
+                    <p className="text-xs text-[color:var(--rc-mist)]">30-day return policy</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Shield className="h-5 w-5 text-[#0d4a4a] mt-1" />
                   <div>
                     <p className="font-semibold text-sm">Secure Checkout</p>
-                    <p className="text-xs text-gray-600">SSL encrypted</p>
+                    <p className="text-xs text-[color:var(--rc-mist)]">SSL encrypted</p>
                   </div>
                 </div>
               </div>

@@ -142,7 +142,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col dark-page-bg">
       <Header />
 
       <main className="flex-1 container mx-auto px-4 py-12">
@@ -150,7 +150,7 @@ export default function CartPage() {
 
         {items.length === 0 ? (
           <div className="text-center py-16">
-            <p className="text-xl text-gray-600 mb-6">Your cart is empty</p>
+            <p className="text-xl text-[color:var(--rc-mist)] mb-6">Your cart is empty</p>
             <Link href="/">
               <Button size="lg">Continue Shopping</Button>
             </Link>
@@ -162,7 +162,7 @@ export default function CartPage() {
               {items.map((item) => (
                 <div
                   key={`${item.id}-${item.size || ''}-${item.color || ''}`}
-                  className="flex gap-4 p-4 border rounded-lg bg-white"
+                  className="flex gap-4 p-4 border rounded-lg bg-white text-gray-900"
                 >
                   <div className="relative w-24 h-24 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
                     <Image
@@ -220,7 +220,7 @@ export default function CartPage() {
 
             {/* Order Summary */}
             <div className="lg:col-span-1">
-              <div className="border rounded-lg p-6 bg-white sticky top-24">
+              <div className="border rounded-lg p-6 bg-white sticky top-24 text-gray-900">
                 <h2 className="text-xl font-bold mb-4">Order Summary</h2>
 
                 {/* Discount Code Input */}

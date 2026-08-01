@@ -80,7 +80,7 @@ export default function ShopPage() {
     : products.filter(product => product.category === selectedCategory)
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col dark-page-bg">
       <Header />
 
       <main className="flex-1">
@@ -125,7 +125,7 @@ export default function ShopPage() {
         {/* Products Grid */}
         <section className="container mx-auto px-4 py-12" suppressHydrationWarning>
           <div className="mb-6">
-            <p className="text-gray-600">
+            <p className="text-[color:var(--rc-mist)]">
               Showing {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}
               {selectedCategory !== "all" && ` in ${categories.find(c => c.id === selectedCategory)?.name}`}
             </p>
@@ -139,7 +139,7 @@ export default function ShopPage() {
 
           {filteredProducts.length === 0 && (
             <div className="text-center py-16">
-              <p className="text-xl text-gray-600">No products found in this category</p>
+              <p className="text-xl text-[color:var(--rc-mist)]">No products found in this category</p>
             </div>
           )}
         </section>

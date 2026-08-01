@@ -15,7 +15,7 @@ interface ProductCardProps {
 
 export function ProductCard({ id, name, price, image, badge, sizes }: ProductCardProps) {
   return (
-    <Card className="group relative overflow-hidden border-0 shadow-none bg-transparent">
+    <Card className="group relative overflow-hidden rounded-lg bg-white p-3 shadow-sm hover:shadow-md transition-shadow">
       <Link href={`/products/${id}`} className="block">
         {/* Badge */}
         {badge && (

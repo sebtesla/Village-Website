@@ -66,10 +66,10 @@ export default function BlogPostPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col dark-page-bg">
         <Header />
         <main className="flex-1 container mx-auto px-4 py-12 text-center">
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-[color:var(--rc-mist)]">Loading...</p>
         </main>
         <Footer />
       </div>
@@ -78,11 +78,11 @@ export default function BlogPostPage() {
 
   if (!post) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col dark-page-bg">
         <Header />
         <main className="flex-1 container mx-auto px-4 py-12 text-center">
           <h1 className="text-3xl font-bold mb-4">Post Not Found</h1>
-          <p className="text-gray-600 mb-6">The blog post you're looking for doesn't exist.</p>
+          <p className="text-[color:var(--rc-mist)] mb-6">The blog post you're looking for doesn't exist.</p>
           <Link href="/blog">
             <Button>Back to Blog</Button>
           </Link>
@@ -121,7 +121,7 @@ export default function BlogPostPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col dark-page-bg">
       <Header />
 
       <main className="flex-1">
@@ -155,7 +155,7 @@ export default function BlogPostPage() {
             </Badge>
             <h1 className="text-3xl md:text-5xl font-bold mb-6">{post.title}</h1>
 
-            <div className="flex flex-wrap items-center gap-6 text-gray-600 mb-6">
+            <div className="flex flex-wrap items-center gap-6 text-[color:var(--rc-mist)] mb-6">
               <span className="flex items-center gap-2">
                 <User className="h-5 w-5" />
                 {post.author}
@@ -192,7 +192,7 @@ export default function BlogPostPage() {
 
           {/* Content */}
           <div className="prose prose-lg max-w-none mb-12">
-            <div className="whitespace-pre-line text-gray-700 leading-relaxed">
+            <div className="whitespace-pre-line text-[color:var(--rc-mist)] leading-relaxed">
               {post.content}
             </div>
           </div>
