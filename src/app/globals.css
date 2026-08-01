@@ -86,6 +86,7 @@
   --rc-bone: #e9e4d6;        /* primary text on dark */
   --rc-mist: #7c9490;        /* muted secondary text */
   --rc-green-live: #6fae62;  /* online/live indicator */
+  --rc-gold-pale: #f2e2c0;   /* light gold card surface, replaces white on dark pages */
 }
 
 .recruit-theme {
@@ -159,26 +160,50 @@
 }
 
 /* Footer is shared with the light-themed shop pages, so only recolor it
-   when it's rendered inside the dark recruit-theme homepage. */
-.recruit-theme footer {
+   when it's rendered inside a dark page (homepage's .recruit-theme, or any
+   other page using .dark-page-bg). */
+.recruit-theme footer,
+.dark-page-bg footer {
   background-color: var(--rc-void) !important;
   border-top-color: var(--rc-teal-line) !important;
   color: var(--rc-bone);
 }
 .recruit-theme footer .text-gray-600,
-.recruit-theme footer .text-gray-500 {
+.recruit-theme footer .text-gray-500,
+.dark-page-bg footer .text-gray-600,
+.dark-page-bg footer .text-gray-500 {
   color: var(--rc-mist) !important;
 }
-.recruit-theme footer a.bg-white {
+.recruit-theme footer a.bg-white,
+.dark-page-bg footer a.bg-white {
   background-color: var(--rc-panel) !important;
   border-color: var(--rc-teal-line) !important;
   color: var(--rc-bone);
 }
-.recruit-theme footer .bg-border {
+.recruit-theme footer .bg-border,
+.dark-page-bg footer .bg-border {
   background-color: var(--rc-teal-line) !important;
 }
-.recruit-theme footer .text-\[\#0d4a4a\] {
+.recruit-theme footer .text-\[\#0d4a4a\],
+.dark-page-bg footer .text-\[\#0d4a4a\] {
   color: var(--rc-gold) !important;
+}
+
+/* Product/blog cards go pale gold instead of white on dark pages. Overriding
+   the shared --card variable means every plain <Card> (product cards, blog
+   cards, related posts, order/account cards) picks this up automatically. */
+.dark-page-bg,
+.recruit-theme {
+  --card: 41 66% 85%;
+}
+.dark-page-bg .bg-white,
+.recruit-theme .bg-white {
+  background-color: var(--rc-gold-pale) !important;
+}
+
+/* Sticky category filter bars (Shop, Blog) — dark panel instead of white. */
+.dark-panel-bg {
+  background-color: var(--rc-panel) !important;
 }
 
 /* Lightweight dark background for pages (Shop, Blog, and others) that keep
